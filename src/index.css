@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+/* Tailwind v4: Define theme tokens and custom utilities for project-specific classes */
+
+@theme {
+  --font-display: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Inter,
+    Helvetica, Arial, "Noto Sans", sans-serif;
+  --font-body: ui-sans-serif, system-ui, Inter, Helvetica, Arial, "Noto Sans",
+    sans-serif;
+}
+
+/* Font utilities */
+@utility font-display {
+  font-family: var(--font-display);
+}
+@utility font-body {
+  font-family: var(--font-body);
+}
+
+/* Layout containers */
+@utility section {
+  @apply rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white/70 dark:bg-neutral-900/70 shadow-sm p-5 sm:p-6 md:p-7;
+}
+
+/* Headings */
+@utility h1 {
+  @apply text-4xl sm:text-5xl font-display font-bold tracking-tight;
+}
+@utility h2 {
+  @apply text-2xl sm:text-3xl font-display font-semibold tracking-tight mb-4;
+}
+
+/* Reusable bits */
+@utility row {
+  @apply flex items-center justify-between gap-4 py-3;
+}
+
+@utility grid-min {
+  @apply grid gap-4;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+}
+
+@utility muted {
+  @apply text-neutral-600 dark:text-neutral-400;
+}
+
+@utility link {
+  @apply underline underline-offset-4 decoration-neutral-300 dark:decoration-neutral-700 text-neutral-900 dark:text-neutral-100 hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors;
+}
+
+@utility pill {
+  @apply inline-flex items-center gap-2 rounded-full border border-neutral-200 dark:border-neutral-800 px-3 py-1.5 text-sm bg-white/70 dark:bg-neutral-900/70 hover:bg-white dark:hover:bg-neutral-900 transition shadow-sm;
+}
+
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-full border border-neutral-200 dark:border-neutral-800 bg-white/70 dark:bg-neutral-900/70 px-3 py-2 shadow-sm hover:bg-white dark:hover:bg-neutral-900 transition;
+}
+
+@utility i {
+  @apply text-lg leading-none;
+}
+
+@utility year {
+  @apply w-20 shrink-0 text-neutral-500 dark:text-neutral-400 text-sm;
+}
+
+/* Minor global tweaks */
+.section:last-child {
+  padding-bottom: 4rem;
+}
+
+/* Badges */
+@utility badge {
+  @apply inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium border;
+}
+@utility badge-success {
+  @apply badge border-green-500/30 text-green-600 dark:text-green-400 bg-green-500/10;
+}
+
+:root {
+  color-scheme: light dark;
+}
+html,
+body,
+#root {
+  height: 100%;
+}
