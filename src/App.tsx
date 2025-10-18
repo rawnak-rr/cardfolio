@@ -14,34 +14,52 @@ export default function App() {
   const pointerTypeRef = useRef<string | null>(null);
 
   const flipCardClassName =
-    "relative h-full w-full rounded-[1.75rem] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.35),0_12px_24px_-16px_rgba(15,23,42,0.45)] [transform-style:preserve-3d] will-change-transform dark:shadow-[0_35px_60px_-18px_rgba(15,23,42,0.75),0_20px_30px_-20px_rgba(15,23,42,0.55)]";
+    "relative h-full w-full rounded-[1.75rem] shadow-[0_30px_60px_-24px_rgba(17,24,39,0.45),0_18px_30px_-20px_rgba(17,24,39,0.3)] [transform-style:preserve-3d] dark:shadow-[0_40px_70px_-24px_rgba(15,23,42,0.75),0_22px_32px_-22px_rgba(15,23,42,0.55)]";
 
   const cardFaceBase =
     "absolute inset-0 z-10 flex flex-col justify-between rounded-[inherit] p-[clamp(1.75rem,_4vw,_2.5rem)] [backface-visibility:hidden]";
 
+  const frontTexture =
+    "bg-[#a48cff] text-indigo-900 [box-shadow:inset_0_12px_24px_-20px_rgba(255,255,255,0.6),inset_0_-16px_28px_-18px_rgba(15,23,42,0.35)] [background-image:linear-gradient(140deg,rgba(255,255,255,0.12),rgba(0,0,0,0.12))]";
+
+  const frontTextureDark =
+    "dark:bg-[#3f37c9] dark:text-indigo-50 dark:[box-shadow:inset_0_14px_30px_-20px_rgba(129,140,248,0.35),inset_0_-16px_30px_-22px_rgba(15,23,42,0.6)] dark:[background-image:linear-gradient(145deg,rgba(129,140,248,0.24),rgba(15,23,42,0.55))]";
+
+  const backTexture =
+    "bg-[#8b73f4] text-indigo-50 [box-shadow:inset_0_10px_22px_-18px_rgba(255,255,255,0.55),inset_0_-14px_24px_-18px_rgba(17,24,39,0.4)] [background-image:linear-gradient(150deg,rgba(255,255,255,0.14),rgba(0,0,0,0.2))]";
+
+  const backTextureDark =
+    "dark:bg-[#312d81] dark:text-indigo-50 dark:[box-shadow:inset_0_12px_28px_-18px_rgba(99,102,241,0.28),inset_0_-16px_30px_-20px_rgba(15,23,42,0.65)] dark:[background-image:linear-gradient(150deg,rgba(129,140,248,0.28),rgba(15,23,42,0.65))]";
+
   const cardFrontClassName = [
     cardFaceBase,
-    "border border-[rgba(231,229,228,0.6)] text-neutral-900",
-    "[background:radial-gradient(circle_at_25%_15%,rgba(244,244,245,1),transparent_55%),radial-gradient(circle_at_80%_85%,rgba(244,244,245,0.85),transparent_60%),linear-gradient(135deg,rgba(244,246,255,1)_0%,rgba(228,233,255,1)_40%,rgba(236,252,203,1)_100%)]",
-    "dark:border-zinc-700/40 dark:text-zinc-200",
-    "dark:[background:radial-gradient(circle_at_20%_20%,rgba(59,130,246,0.25),transparent_55%),radial-gradient(circle_at_70%_80%,rgba(236,72,153,0.2),transparent_65%),linear-gradient(140deg,rgba(24,24,27,1),rgba(17,24,39,1)_55%,rgba(30,41,59,1))]",
+    "border border-[rgba(124,104,255,0.55)]",
+    frontTexture,
+    frontTextureDark,
   ].join(" ");
 
   const cardBackClassName = [
     cardFaceBase,
-    "border border-[rgba(148,163,184,0.35)] text-slate-100",
+    "border border-[rgba(116,97,255,0.5)]",
+    backTexture,
+    backTextureDark,
     "[transform:rotateY(180deg)]",
-    "[background:radial-gradient(circle_at_20%_80%,rgba(56,189,248,0.65),transparent_55%),radial-gradient(circle_at_80%_20%,rgba(251,191,36,0.55),transparent_45%),linear-gradient(135deg,rgba(14,116,144,1),rgba(30,64,175,1)_45%,rgba(76,29,149,1))]",
-    "dark:border-slate-400/40 dark:text-slate-100",
-    "dark:[background:radial-gradient(circle_at_20%_80%,rgba(14,165,233,0.55),transparent_55%),radial-gradient(circle_at_80%_20%,rgba(249,115,22,0.45),transparent_60%),linear-gradient(140deg,rgba(30,41,59,1),rgba(49,46,129,1)_60%,rgba(76,29,149,1))]",
   ].join(" ");
+
+  const noiseOverlayClass =
+    "pointer-events-none absolute inset-0 z-20 rounded-[inherit] border border-white/20 opacity-90 [background-blend-mode:soft-light,overlay] [background-image:linear-gradient(0deg,rgba(255,255,255,0.04),rgba(17,17,17,0.12)),url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.18'/%3E%3C/svg%3E\")] [background-size:100%_100%,160px_160px] dark:border-white/10 dark:opacity-80";
 
   useEffect(() => {
     if (!cardRef.current) {
       return undefined;
     }
 
-    gsap.set(cardRef.current, { rotateX: 0, rotateY: 0 });
+    gsap.set(cardRef.current, {
+      rotateX: 0,
+      rotateY: 0,
+      transformPerspective: 1600,
+      transformOrigin: "50% 50%",
+    });
 
     return () => {
       if (cardRef.current) {
@@ -59,22 +77,23 @@ export default function App() {
 
     gsap.to(cardRef.current, {
       rotateY: baseRotationRef.current + hoverTiltRef.current.y,
-      duration: 0.9,
-      ease: "power3.inOut",
+      duration: 1.1,
+      ease: "power4.inOut",
+      overwrite: "auto",
     });
   }, [isFlipped]);
 
   const handlePointerEnter = (event: React.PointerEvent<HTMLButtonElement>) => {
     pointerTypeRef.current = event.pointerType;
 
-    if (!cardRef.current || event.pointerType !== "mouse") {
+    if (event.pointerType !== "mouse" || !cardRef.current) {
       return;
     }
 
     gsap.to(cardRef.current, {
-      scale: 1.02,
-      duration: 0.35,
+      duration: 0.3,
       ease: "power2.out",
+      overwrite: "auto",
     });
   };
 
@@ -86,16 +105,16 @@ export default function App() {
     const bounds = event.currentTarget.getBoundingClientRect();
     const relativeX = (event.clientX - bounds.left) / bounds.width;
     const relativeY = (event.clientY - bounds.top) / bounds.height;
-    const tiltY = (relativeX - 0.5) * 18;
-    const tiltX = (0.5 - relativeY) * 14;
+    const tiltY = (relativeX - 0.5) * 10;
+    const tiltX = (0.5 - relativeY) * 6;
 
     hoverTiltRef.current = { x: tiltX, y: tiltY };
 
     gsap.to(cardRef.current, {
       rotateX: tiltX,
       rotateY: baseRotationRef.current + tiltY,
-      duration: 0.4,
-      ease: "power2.out",
+      duration: 0.24,
+      ease: "power3.out",
       overwrite: "auto",
     });
   };
@@ -112,8 +131,7 @@ export default function App() {
     gsap.to(cardRef.current, {
       rotateX: 0,
       rotateY: baseRotationRef.current,
-      scale: 1,
-      duration: 0.45,
+      duration: 0.42,
       ease: "power2.out",
       overwrite: "auto",
     });
@@ -137,37 +155,35 @@ export default function App() {
           <div
             ref={cardRef}
             className={flipCardClassName}>
-            <div className="pointer-events-none absolute inset-0 z-20 rounded-[inherit] border border-white/25 opacity-40 [mix-blend-mode:screen]"></div>
+            <div className={noiseOverlayClass}></div>
 
             <div className={cardFrontClassName}>
-              <div>
-                <p className="text-xs uppercase tracking-[0.5em] text-neutral-500/70 dark:text-neutral-400/80 mb-6">
-                  {profile.role}
-                </p>
+              <div className="space-y-5">
                 <h1 className="text-4xl font-[var(--font-display)] font-semibold tracking-tight md:text-5xl">
                   {profile.name}
                 </h1>
+                <div className="space-y-1 text-sm font-medium text-indigo-900/85 dark:text-indigo-100/90">
+                  <p className="text-xs uppercase tracking-[0.4em] text-indigo-900/60 dark:text-indigo-200/70">
+                    {currentStudy?.title ?? "UNSW"}
+                  </p>
+                  <p className="text-base font-medium">{profile.role}</p>
+                  <p>{currentStudy?.place ?? "Sydney"}</p>
+                </div>
               </div>
-              <div className="flex items-center justify-between text-sm font-medium text-neutral-600 dark:text-neutral-300">
-                <span>{currentStudy?.place ?? "Sydney, Australia"}</span>
-                <span>{currentStudy?.year ?? "Present"}</span>
-              </div>
+              <div />
             </div>
 
             <div className={cardBackClassName}>
               <div>
-                <p className="text-xs uppercase tracking-[0.5em] text-neutral-200/80 mb-6">
-                  {featuredProject?.year ?? "2025"}
+                <p className="text-xs uppercase tracking-[0.45em] text-indigo-100/80">
+                  Founder && CEO
                 </p>
-                <h2 className="text-3xl font-[var(--font-display)] font-semibold tracking-tight text-white md:text-4xl">
+                <h2 className="mt-4 text-3xl font-[var(--font-display)] font-semibold tracking-tight md:text-4xl">
                   {featuredProject?.title ?? "turFinder*"}
                 </h2>
               </div>
-              <div className="space-y-1 text-sm text-neutral-100/80">
-                <p>{featuredProject?.desc ?? "reimagined connections through sports"}</p>
-                <p className="font-medium">
-                  {currentStudy?.title ?? "UNSW"} · {currentStudy?.place ?? "Sydney, Australia"}
-                </p>
+              <div className="text-sm text-indigo-100/85">
+                <p>{featuredProject?.desc ?? "Reimagining connections through sports."}</p>
               </div>
             </div>
           </div>
