@@ -159,7 +159,7 @@ export default function App() {
 
             <div className={cardFrontClassName}>
               <div className="space-y-5">
-                <h1 className="text-4xl font-[var(--font-display)] font-semibold tracking-tight md:text-5xl">
+                <h1 className="text-4xl font-semibold tracking-tight md:text-5xl">
                   {profile.name}
                 </h1>
                 <div className="space-y-1 text-sm font-medium text-indigo-900/85 dark:text-indigo-100/90">
@@ -169,6 +169,7 @@ export default function App() {
                   <p className="text-base font-medium">{profile.role}</p>
                   <p>{currentStudy?.place ?? "Sydney"}</p>
                 </div>
+                <div className="">contact</div>
               </div>
               <div />
             </div>
@@ -178,12 +179,15 @@ export default function App() {
                 <p className="text-xs uppercase tracking-[0.45em] text-indigo-100/80">
                   Founder && CEO
                 </p>
-                <h2 className="mt-4 text-3xl font-[var(--font-display)] font-semibold tracking-tight md:text-4xl">
+                <h2 className="mt-4 text-3xl font-semibold tracking-tight md:text-4xl">
                   {featuredProject?.title ?? "turFinder*"}
                 </h2>
               </div>
               <div className="text-sm text-indigo-100/85">
-                <p>{featuredProject?.desc ?? "Reimagining connections through sports."}</p>
+                <p>
+                  {featuredProject?.desc ??
+                    "Reimagining connections through sports."}
+                </p>
               </div>
             </div>
           </div>

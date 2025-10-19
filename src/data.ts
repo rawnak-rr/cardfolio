@@ -7,7 +7,7 @@ export const profile = {
 export const sideProjects = [
   {
     year: "2025",
-    title: "Founder && CEO",
+    title: "turFinder*",
     desc: "reimagined connections through sports",
     href: "https://turfinder.com",
   },
