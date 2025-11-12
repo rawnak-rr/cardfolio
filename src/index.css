@@ -1,19 +1,12 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
-  --font-display: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Inter,
-    Helvetica, Arial, "Noto Sans", sans-serif;
-  --font-body: ui-sans-serif, system-ui, Inter, Helvetica, Arial, "Noto Sans",
-    sans-serif;
-  --font-red: "Red Hat Mono", monospace;
+  --font-redhatmono: 'Red Hat Mono', monospace;
+  --font-src: 'Source serif 4', sans-serif;
 }
 
-:root {
-  color-scheme: light dark;
-}
-
-html,
-body,
-#root {
-  height: 100%;
+.paper-grain {
+  background-image: url('https://grainy-gradients.vercel.app/noise.svg');
+  mix-blend-mode: overlay;
+  opacity: 0.15;
 }
