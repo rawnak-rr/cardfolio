@@ -21,27 +21,27 @@ export default function App() {
     'absolute inset-0 z-10 flex flex-col justify-between overflow-hidden rounded-[inherit] p-[clamp(1.75rem,_4vw,_2.5rem)] [backface-visibility:hidden]';
 
   const frontTexture =
-    'bg-[#a48cff] text-indigo-900 [box-shadow:inset_0_12px_24px_-20px_rgba(255,255,255,0.6),inset_0_-16px_28px_-18px_rgba(15,23,42,0.35)] [background-image:linear-gradient(140deg,rgba(255,255,255,0.12),rgba(0,0,0,0.12))]';
+    'bg-[#ff6f00] text-white [box-shadow:inset_0_12px_24px_-20px_rgba(255,255,255,0.6),inset_0_-16px_28px_-18px_rgba(84,31,0,0.28)]';
 
   const frontTextureDark =
-    'dark:bg-[#3f37c9] dark:text-indigo-50 dark:[box-shadow:inset_0_14px_30px_-20px_rgba(129,140,248,0.35),inset_0_-16px_30px_-22px_rgba(15,23,42,0.6)] dark:[background-image:linear-gradient(145deg,rgba(129,140,248,0.24),rgba(15,23,42,0.55))]';
+    'dark:bg-[#cc5200] dark:text-orange-50 dark:[box-shadow:inset_0_14px_30px_-20px_rgba(255,186,140,0.3),inset_0_-16px_30px_-22px_rgba(20,7,0,0.55)]';
 
   const backTexture =
-    'bg-[#8b73f4] text-indigo-50 [box-shadow:inset_0_10px_22px_-18px_rgba(255,255,255,0.55),inset_0_-14px_24px_-18px_rgba(17,24,39,0.4)] [background-image:linear-gradient(150deg,rgba(255,255,255,0.14),rgba(0,0,0,0.2))]';
+    'bg-[#f05600] text-orange-50 [box-shadow:inset_0_10px_22px_-18px_rgba(255,255,255,0.5),inset_0_-14px_24px_-18px_rgba(74,24,0,0.4)]';
 
   const backTextureDark =
-    'dark:bg-[#312d81] dark:text-indigo-50 dark:[box-shadow:inset_0_12px_28px_-18px_rgba(99,102,241,0.28),inset_0_-16px_30px_-20px_rgba(15,23,42,0.65)] dark:[background-image:linear-gradient(150deg,rgba(129,140,248,0.28),rgba(15,23,42,0.65))]';
+    'dark:bg-[#993900] dark:text-orange-50 dark:[box-shadow:inset_0_12px_28px_-18px_rgba(255,185,120,0.25),inset_0_-16px_30px_-20px_rgba(20,7,0,0.65)]';
 
   const cardFrontClassName = [
     cardFaceBase,
-    'border border-[rgba(124,104,255,0.55)]',
+    'border border-[rgba(255,200,150,0.55)]',
     frontTexture,
     frontTextureDark,
   ].join(' ');
 
   const cardBackClassName = [
     cardFaceBase,
-    'border border-[rgba(116,97,255,0.5)]',
+    'border border-[rgba(210,92,32,0.55)]',
     backTexture,
     backTextureDark,
     '[transform:rotateY(180deg)]',
@@ -174,20 +174,45 @@ export default function App() {
             <div className={noiseOverlayClass}></div>
 
             <div className={cardFrontClassName}>
-              <div className='space-y-5'>
-                <h1 className='text-4xl font-semibold tracking-tight md:text-5xl'>
-                  {profile.name}
-                </h1>
-                <div className='space-y-1 text-sm font-medium'>
-                  <p className='text-xs uppercase tracking-[0.4em]'>
-                    {currentStudy?.title ?? 'UNSW'}
+              <div className='flex h-full flex-col justify-between'>
+                <div className='space-y-2'>
+                  <p className='text-[0.6rem] uppercase tracking-[0.55em] text-white/60'>
+                    channel orange id
                   </p>
-                  <p className='text-base font-medium'>{profile.role}</p>
-                  <p>{currentStudy?.place ?? 'Sydney'}</p>
+                  <h1 className='text-4xl font-semibold tracking-tight md:text-5xl'>
+                    {profile.name}
+                  </h1>
+                  <p className='text-lg uppercase tracking-[0.35em] text-white/85'>
+                    {profile.role}
+                  </p>
                 </div>
-                <div className='uppercase'>contact</div>
+                <div className='space-y-5 text-sm text-white/90'>
+                  <div className='grid grid-cols-2 gap-5'>
+                    <div>
+                      <p className='text-[0.6rem] uppercase tracking-[0.5em] text-white/60'>
+                        study
+                      </p>
+                      <p className='mt-2 text-xl font-semibold uppercase tracking-tight'>
+                        {currentStudy?.title ?? 'UNSW'}
+                      </p>
+                      <p className='text-white/70'>{currentStudy?.place ?? 'Sydney'}</p>
+                    </div>
+                    <div>
+                      <p className='text-[0.6rem] uppercase tracking-[0.5em] text-white/60'>
+                        contact
+                      </p>
+                      <p className='mt-2 text-base font-semibold'>
+                        hello@{profile.name}.dev
+                      </p>
+                      <p className='text-white/70'>{profile.about}</p>
+                    </div>
+                  </div>
+                  <div className='flex items-center justify-between text-[0.65rem] uppercase tracking-[0.45em] text-white/60'>
+                    <span>{currentStudy?.year ?? '20XX'}</span>
+                    <span>@{profile.name}</span>
+                  </div>
+                </div>
               </div>
-              <div />
             </div>
 
             <div className={cardBackClassName}>
@@ -196,20 +221,24 @@ export default function App() {
                 className='pointer-events-none absolute inset-0 z-0 mix-blend-soft-light opacity-80 dark:opacity-65'
                 style={debossPaperTextureStyle}
               />
-              <DebossedPattern className='absolute inset-x-[-18%] top-[-12%] z-0 h-[130%] w-[140%] opacity-90 text-[#0c0731] dark:text-indigo-100/20 dark:opacity-60' />
-              <div className='relative z-10'>
-                <p className='text-xs uppercase tracking-[0.45em] text-indigo-100/80'>
-                  Founder && CEO
-                </p>
-                <h2 className='mt-4 text-3xl font-semibold tracking-tight md:text-4xl'>
-                  {featuredProject?.title ?? 'turFinder*'}
-                </h2>
-              </div>
-              <div className='relative z-10 text-sm text-indigo-100/85'>
-                <p>
+              <DebossedPattern className='absolute inset-x-[-18%] top-[-12%] z-0 h-[130%] w-[140%] opacity-90 text-[#a03b00] dark:text-white/20 dark:opacity-60' />
+              <div className='relative z-10 flex h-full flex-col justify-between'>
+                <div className='space-y-3'>
+                  <p className='text-xs uppercase tracking-[0.5em] text-white/75'>
+                    project spotlight
+                  </p>
+                  <h2 className='text-3xl font-semibold tracking-tight md:text-4xl'>
+                    {featuredProject?.title ?? 'turFinder*'}
+                  </h2>
+                </div>
+                <p className='text-sm leading-relaxed text-white/85'>
                   {featuredProject?.desc ??
                     'Reimagining connections through sports.'}
                 </p>
+                <div className='flex items-center justify-between text-[0.65rem] uppercase tracking-[0.45em] text-white/70'>
+                  <span>{featuredProject?.year ?? '2025'}</span>
+                  <span>rawnak.studio</span>
+                </div>
               </div>
             </div>
           </div>
