@@ -72,7 +72,7 @@ export default function App() {
   };
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center font-redhatmono gap-6 px-6 py-12">
+    <main className="min-h-screen flex flex-col items-center justify-center font-mono gap-6 px-6 py-12">
       <div className="w-[min(90vw,420px)] [perspective:1600px]">
         <button
           type="button"
@@ -87,40 +87,51 @@ export default function App() {
             <div className="noise-overlay" />
 
             <div className="card-face card-front">
-              <div className="flex h-full flex-col justify-between">
-                <div className="space-y-2">
-                  <h1 className="text-4xl font-semibold tracking-tight md:text-5xl">
-                    {profile.name}
+              <div className="flex h-full flex-col justify-end">
+                <div className="space-y-0.5 text-left">
+                  <h1 className="text-base font-bold uppercase tracking-[0.08em] text-black/90">
+                    {profile.name.toUpperCase()}
                   </h1>
-                  <p className="text-lg uppercase tracking-[0.35em] text-white/85">
-                    {profile.role}
+                  <p className="text-sm uppercase tracking-[0.08em] text-black/50">
+                    {profile.role.toUpperCase()}.
+                  </p>
+                  <p className="text-sm uppercase tracking-[0.08em] text-black/50">
+                    STUDYING{' '}
+                    <span className="dotted-link text-black/70">
+                      {currentStudy?.title ?? 'UNSW'}
+                    </span>
+                    .
                   </p>
                 </div>
-                <div className="space-y-5 text-sm text-white/90">
-                  <div className="grid grid-cols-2 gap-5">
-                    <div>
-                      <p className="mt-2 text-xl font-semibold uppercase tracking-tight">
-                        {currentStudy?.title ?? 'UNSW'}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="mt-2 text-base font-semibold">contact</p>
-                    </div>
-                  </div>
-                </div>
+                <a
+                  href="mailto:rawnak@example.com"
+                  className="dotted-link absolute bottom-[clamp(1.75rem,4vw,2.5rem)] right-[clamp(1.75rem,4vw,2.5rem)] text-sm uppercase tracking-[0.08em] text-black/50"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  CONTACT
+                </a>
               </div>
             </div>
 
             <div className="card-face card-back">
-              <div className="relative z-10 flex h-full flex-col justify-between">
-                <div className="space-y-3">
-                  <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">
-                    {featuredProject?.title ?? 'turFinder*'}
+              <div className="relative z-10 flex h-full flex-col justify-end">
+                <div className="space-y-0.5 text-left">
+                  <h2 className="text-base font-bold uppercase tracking-[0.08em] text-black/90">
+                    {featuredProject?.title?.toUpperCase() ?? 'TURFINDER*'}
                   </h2>
+                  <p className="text-sm uppercase tracking-[0.08em] text-black/50">
+                    {featuredProject?.desc?.toUpperCase() ?? 'REIMAGINED CONNECTIONS THROUGH SPORTS'}.
+                  </p>
                 </div>
-                <p className="text-sm leading-relaxed text-white/85">
-                  {featuredProject?.desc ?? 'Reimagining connections through sports.'}
-                </p>
+                <a
+                  href="https://github.com/rawnakhossaindeepto"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="dotted-link absolute bottom-[clamp(1.75rem,4vw,2.5rem)] right-[clamp(1.75rem,4vw,2.5rem)] text-sm uppercase tracking-[0.08em] text-black/50"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  GITHUB
+                </a>
               </div>
             </div>
           </div>
