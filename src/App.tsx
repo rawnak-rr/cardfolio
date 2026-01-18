@@ -96,11 +96,7 @@ export default function App() {
                     {profile.role.toUpperCase()}.
                   </p>
                   <p className="text-sm uppercase tracking-[0.08em] text-black/50">
-                    STUDYING{' '}
-                    <span className="dotted-link text-black/70">
-                      {currentStudy?.title ?? 'UNSW'}
-                    </span>
-                    .
+                    {currentStudy?.title ?? 'UNSW'}.
                   </p>
                 </div>
                 <a
@@ -115,31 +111,49 @@ export default function App() {
 
             <div className="card-face card-back">
               <div className="relative z-10 flex h-full flex-col justify-end">
-                <div className="space-y-0.5 text-left">
-                  <h2 className="text-base font-bold uppercase tracking-[0.08em] text-black/90">
-                    {featuredProject?.title?.toUpperCase() ?? 'TURFINDER*'}
-                  </h2>
-                  <p className="text-sm uppercase tracking-[0.08em] text-black/50">
-                    {featuredProject?.desc?.toUpperCase() ?? 'REIMAGINED CONNECTIONS THROUGH SPORTS'}.
-                  </p>
+                <div className="space-y-2 text-left">
+                  <div className="space-y-0.5">
+                    <h2 className="text-base font-bold uppercase tracking-[0.08em] text-black/90">
+                      LEIBNIZ EDUCATION
+                    </h2>
+                    <p className="text-sm uppercase tracking-[0.08em] text-black/50">
+                      SOFTWARE ENGINEER.
+                    </p>
+                  </div>
+                  <div className="flex justify-between items-end">
+                    <div className="space-y-0.5">
+                      <h2 className="text-base font-bold uppercase tracking-[0.08em] text-black/90">
+                        TURFINDER*
+                      </h2>
+                      <p className="text-sm uppercase tracking-[0.08em] text-black/50">
+                        FOUNDER.
+                      </p>
+                    </div>
+                    <div className="flex flex-col items-end space-y-0.5">
+                      <a
+                        href="#"
+                        className="dotted-link text-sm uppercase tracking-[0.08em] text-black/50"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        PURSUITS
+                      </a>
+                      <a
+                        href="https://github.com/rawnak-rr"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="dotted-link text-sm uppercase tracking-[0.08em] text-black/50"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        GITHUB
+                      </a>
+                    </div>
+                  </div>
                 </div>
-                <a
-                  href="https://github.com/rawnakhossaindeepto"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="dotted-link absolute bottom-[clamp(1.75rem,4vw,2.5rem)] right-[clamp(1.75rem,4vw,2.5rem)] text-sm uppercase tracking-[0.08em] text-black/50"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  GITHUB
-                </a>
               </div>
             </div>
           </div>
         </button>
       </div>
-      <p className="text-sm uppercase tracking-[0.4em] text-neutral-400 dark:text-neutral-500">
-        tap or click to flip
-      </p>
     </main>
   );
 }
