@@ -14,29 +14,26 @@ const pursuitsCategories = [
 // Sample content for each category (you can expand this)
 const pursuitsContent: Record<string, string[]> = {
   games: [
-    'Dark Souls series - mastering patience and perseverance',
-    'Hollow Knight - art direction perfection',
-    'Celeste - storytelling through gameplay',
+    'CSGO - in another life i\'d be a cs pro my whole life',
+    'Valorant',
+    'if you didn\'t realize already, i love aiming',
   ],
   books: [
-    'Gödel, Escher, Bach - consciousness and self-reference',
-    'The Pragmatic Programmer - timeless dev wisdom',
-    'Dune - world-building at its finest',
+    'Babel',
+    '1984',
+    'Percy Jackson',
   ],
   movies: [
-    'Blade Runner 2049 - visual poetry',
-    'Arrival - language shapes thought',
-    'Stalker - atmospheric storytelling',
+    'The Karate Kid',
+    'The Social Network',
+    'The Pursuit of Happyness',
   ],
   music: [
-    'Radiohead - experimental soundscapes',
-    'Nujabes - lo-fi before it was a genre',
-    'Boards of Canada - nostalgic electronics',
+    'where do i even start'
   ],
   art: [
-    'Beksinski - surreal nightmares',
-    'Moebius - sci-fi linework',
-    'Hiroshi Yoshida - woodblock serenity',
+    'i love animation, cinematography, music, artwork',
+    'earth without art is just eh'
   ],
 };
 
