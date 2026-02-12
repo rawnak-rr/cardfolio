@@ -1,46 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { profile, sideProjects, studies } from './data';
-
-// Pursuits data
-const pursuitsCategories = [
-  { id: 'games', title: 'Games' },
-  { id: 'books', title: 'Books' },
-  { id: 'movies', title: 'Movies' },
-  { id: 'music', title: 'Music' },
-  { id: 'art', title: 'Art' },
-];
-
-// Sample content for each category (you can expand this)
-const pursuitsContent: Record<string, string[]> = {
-  games: [
-    'CSGO - in another life i\'d be a cs pro my whole life',
-    'Valorant',
-    'if you didn\'t realize already, i love aiming',
-  ],
-  books: [
-    'Babel',
-    '1984',
-    'Percy Jackson',
-  ],
-  movies: [
-    'The Karate Kid',
-    'The Social Network',
-    'The Pursuit of Happyness',
-  ],
-  music: [
-    'where do i even start'
-  ],
-  art: [
-    'i love animation, cinematography, music, artwork',
-    'earth without art is just eh'
-  ],
-};
+import { noteContent } from './noteContent';
 
 export default function App() {
   const [isFlipped, setIsFlipped] = useState(false);
-  const [showPursuits, setShowPursuits] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [showNote, setShowNote] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
   const cardContainerRef = useRef<HTMLDivElement>(null);
   const rotationState = useRef({ base: 0, tiltX: 0, tiltY: 0 });
@@ -109,13 +74,12 @@ export default function App() {
     });
   };
 
-  const handlePursuitsClick = (e: React.MouseEvent) => {
+  const handleNoteClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!cardContainerRef.current || !cardRef.current) return;
 
-    // Animate card: rotate to vertical and slide up like ATM insertion
     const tl = gsap.timeline({
-      onComplete: () => setShowPursuits(true)
+      onComplete: () => setShowNote(true)
     });
 
     tl.to(cardRef.current, {
@@ -132,23 +96,18 @@ export default function App() {
     }, '-=0.1');
   };
 
-  const handleClosePursuits = () => {
+  const handleCloseNote = () => {
     if (!cardContainerRef.current || !cardRef.current) return;
 
-    // Hide pursuits first, then animate card back
-    setShowPursuits(false);
-    setSelectedCategory(null);
+    setShowNote(false);
 
-    // Reverse animation: slide down, then rotate back
     const tl = gsap.timeline();
 
-    // Slide down (reverse of slide up)
     tl.to(cardContainerRef.current, {
       y: '0%',
       duration: 0.6,
       ease: 'power2.out',
     })
-    // Then rotate back to horizontal (reverse of rotate to vertical)
     .to(cardRef.current, {
       rotateZ: 0,
       duration: 0.6,
@@ -165,7 +124,7 @@ export default function App() {
           onPointerEnter={handlePointerEnter}
           onPointerMove={handlePointerMove}
           onPointerLeave={handlePointerLeave}
-          onClick={() => !showPursuits && setIsFlipped((f) => !f)}
+          onClick={() => !showNote && setIsFlipped((f) => !f)}
           aria-label={isFlipped ? 'Show front of card' : 'Show back of card'}
         >
           <div ref={cardRef} className="flip-card">
@@ -218,9 +177,9 @@ export default function App() {
                       <button
                         type="button"
                         className="dotted-link text-sm uppercase tracking-[0.08em] text-black/50 bg-transparent border-0 cursor-pointer p-0"
-                        onClick={handlePursuitsClick}
+                        onClick={handleNoteClick}
                       >
-                        PURSUITS
+                        THOUGHTS
                       </button>
                       <a
                         href="https://github.com/rawnak-rr"
@@ -240,69 +199,23 @@ export default function App() {
         </button>
       </div>
 
-      {/* Pursuits Panel - thoughts-style UI */}
+      {/* Note Panel */}
       <div
-        className={`pursuits-panel fixed inset-0 bg-black text-white transition-opacity duration-300 flex items-center justify-center ${
-          showPursuits ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        className={`note-panel fixed inset-0 bg-black text-white transition-opacity duration-300 flex items-center justify-center ${
+          showNote ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
       >
-        <div className="max-w-2xl px-4 sm:px-6 md:px-8 py-8">
-          <header className="text-xl">
-            <div>pursuits</div>
-            <div className="my-4">-</div>
-          </header>
-
-          {!selectedCategory ? (
-            // Category list
-            <main>
-              <div className="space-y-1">
-                {pursuitsCategories.map((cat, i) => (
-                  <div key={cat.id} className="text-lg">
-                    <button
-                      type="button"
-                      onClick={() => setSelectedCategory(cat.id)}
-                      className="hover:underline bg-transparent border-0 text-white cursor-pointer p-0 text-lg text-left"
-                    >
-                      {String(i).padStart(2, '0')}. {cat.title}
-                    </button>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-6">
-                <button
-                  type="button"
-                  onClick={handleClosePursuits}
-                  className="underline bg-transparent border-0 text-white cursor-pointer p-0"
-                >
-                  ../
-                </button>
-              </div>
-            </main>
-          ) : (
-            // Category content
-            <main>
-              <div className="text-xl">
-                # {pursuitsCategories.find((c) => c.id === selectedCategory)?.title.toLowerCase()}
-              </div>
-              <div className="my-4">-</div>
-              <div className="space-y-3">
-                {pursuitsContent[selectedCategory]?.map((item, i) => (
-                  <div key={i} className="text-base leading-relaxed">
-                    {String(i).padStart(2, '0')}. {item}
-                  </div>
-                ))}
-              </div>
-              <div className="mt-6">
-                <button
-                  type="button"
-                  onClick={() => setSelectedCategory(null)}
-                  className="underline bg-transparent border-0 text-white cursor-pointer p-0"
-                >
-                  ../
-                </button>
-              </div>
-            </main>
-          )}
+        <div className="max-w-md px-6 flex flex-col gap-8">
+          <p className="text-sm leading-relaxed tracking-wide">
+            {noteContent}
+          </p>
+          <button
+            type="button"
+            onClick={handleCloseNote}
+            className="self-start underline bg-transparent border-0 text-white/50 cursor-pointer p-0 text-sm"
+          >
+            ../
+          </button>
         </div>
       </div>
     </main>
