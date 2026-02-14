@@ -6,6 +6,8 @@ import { noteContent } from './noteContent';
 export default function App() {
   const [isFlipped, setIsFlipped] = useState(false);
   const [showNote, setShowNote] = useState(false);
+  const [showContact, setShowContact] = useState(false);
+  const [emailCopied, setEmailCopied] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
   const cardContainerRef = useRef<HTMLDivElement>(null);
   const rotationState = useRef({ base: 0, tiltX: 0, tiltY: 0 });
@@ -96,10 +98,33 @@ export default function App() {
     }, '-=0.1');
   };
 
-  const handleCloseNote = () => {
+  const handleContactClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!cardContainerRef.current || !cardRef.current) return;
+
+    const tl = gsap.timeline({
+      onComplete: () => setShowContact(true)
+    });
+
+    tl.to(cardRef.current, {
+      rotateX: 0,
+      rotateY: rotationState.current.base,
+      rotateZ: 90,
+      duration: 0.6,
+      ease: 'power3.inOut',
+    })
+    .to(cardContainerRef.current, {
+      y: '-250%',
+      duration: 0.6,
+      ease: 'power2.in',
+    }, '-=0.1');
+  };
+
+  const handleClosePanel = () => {
     if (!cardContainerRef.current || !cardRef.current) return;
 
     setShowNote(false);
+    setShowContact(false);
 
     const tl = gsap.timeline();
 
@@ -124,7 +149,7 @@ export default function App() {
           onPointerEnter={handlePointerEnter}
           onPointerMove={handlePointerMove}
           onPointerLeave={handlePointerLeave}
-          onClick={() => !showNote && setIsFlipped((f) => !f)}
+          onClick={() => !showNote && !showContact && setIsFlipped((f) => !f)}
           aria-label={isFlipped ? 'Show front of card' : 'Show back of card'}
         >
           <div ref={cardRef} className="flip-card">
@@ -143,13 +168,13 @@ export default function App() {
                     {currentStudy?.title ?? 'UNSW'}.
                   </p>
                 </div>
-                <a
-                  href="mailto:rawnak@example.com"
-                  className="dotted-link absolute bottom-[clamp(1.75rem,4vw,2.5rem)] right-[clamp(1.75rem,4vw,2.5rem)] text-sm uppercase tracking-[0.08em] text-black/50"
-                  onClick={(e) => e.stopPropagation()}
+                <button
+                  type="button"
+                  className="dotted-link absolute bottom-[clamp(1.75rem,4vw,2.5rem)] right-[clamp(1.75rem,4vw,2.5rem)] text-sm uppercase tracking-[0.08em] text-black/50 bg-transparent border-0 cursor-pointer p-0"
+                  onClick={handleContactClick}
                 >
                   CONTACT
-                </a>
+                </button>
               </div>
             </div>
 
@@ -211,7 +236,52 @@ export default function App() {
           </p>
           <button
             type="button"
-            onClick={handleCloseNote}
+            onClick={handleClosePanel}
+            className="self-start underline bg-transparent border-0 text-white/50 cursor-pointer p-0 text-sm"
+          >
+            ../
+          </button>
+        </div>
+      </div>
+      {/* Contact Panel */}
+      <div
+        className={`note-panel fixed inset-0 bg-black text-white transition-opacity duration-300 flex items-center justify-center ${
+          showContact ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+      >
+        <div className="max-w-md px-6 flex flex-col gap-8">
+          <div className="space-y-4 text-sm tracking-wide">
+            <button
+              type="button"
+              className="block text-white/80 hover:text-white transition-colors bg-transparent border-0 cursor-pointer p-0 text-sm tracking-wide font-[inherit]"
+              onClick={() => {
+                navigator.clipboard.writeText('rawnakd11@gmail.com');
+                setEmailCopied(true);
+                setTimeout(() => setEmailCopied(false), 2000);
+              }}
+            >
+              {emailCopied ? 'copied!' : 'rawnakd11@gmail.com'}
+            </button>
+            <a
+              href="https://www.linkedin.com/in/xdef"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block text-white/80 hover:text-white transition-colors"
+            >
+              linkedin.com/in/xdef
+            </a>
+            <a
+              href="https://www.instagram.com/dewepto/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block text-white/80 hover:text-white transition-colors"
+            >
+              instagram.com/dewepto
+            </a>
+          </div>
+          <button
+            type="button"
+            onClick={handleClosePanel}
             className="self-start underline bg-transparent border-0 text-white/50 cursor-pointer p-0 text-sm"
           >
             ../
