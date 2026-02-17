@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
-import { profile, sideProjects, studies } from './data';
+import { profile, sideProjects, studies, experience } from './data';
 import { noteContent } from './noteContent';
 
 export default function App() {
   const [isFlipped, setIsFlipped] = useState(false);
   const [showNote, setShowNote] = useState(false);
   const [showContact, setShowContact] = useState(false);
+  const [showResume, setShowResume] = useState(false);
   const [emailCopied, setEmailCopied] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
   const cardContainerRef = useRef<HTMLDivElement>(null);
@@ -98,6 +99,28 @@ export default function App() {
     }, '-=0.1');
   };
 
+  const handleResumeClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!cardContainerRef.current || !cardRef.current) return;
+
+    const tl = gsap.timeline({
+      onComplete: () => setShowResume(true)
+    });
+
+    tl.to(cardRef.current, {
+      rotateX: 0,
+      rotateY: rotationState.current.base,
+      rotateZ: 90,
+      duration: 0.6,
+      ease: 'power3.inOut',
+    })
+    .to(cardContainerRef.current, {
+      y: '-250%',
+      duration: 0.6,
+      ease: 'power2.in',
+    }, '-=0.1');
+  };
+
   const handleContactClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!cardContainerRef.current || !cardRef.current) return;
@@ -125,6 +148,7 @@ export default function App() {
 
     setShowNote(false);
     setShowContact(false);
+    setShowResume(false);
 
     const tl = gsap.timeline();
 
@@ -149,7 +173,7 @@ export default function App() {
           onPointerEnter={handlePointerEnter}
           onPointerMove={handlePointerMove}
           onPointerLeave={handlePointerLeave}
-          onClick={() => !showNote && !showContact && setIsFlipped((f) => !f)}
+          onClick={() => !showNote && !showContact && !showResume && setIsFlipped((f) => !f)}
           aria-label={isFlipped ? 'Show front of card' : 'Show back of card'}
         >
           <div ref={cardRef} className="flip-card">
@@ -168,13 +192,22 @@ export default function App() {
                     {currentStudy?.title ?? 'UNSW'}.
                   </p>
                 </div>
-                <button
-                  type="button"
-                  className="dotted-link absolute bottom-[clamp(1.75rem,4vw,2.5rem)] right-[clamp(1.75rem,4vw,2.5rem)] text-sm uppercase tracking-[0.08em] text-black/50 bg-transparent border-0 cursor-pointer p-0"
-                  onClick={handleContactClick}
-                >
-                  CONTACT
-                </button>
+                <div className="absolute bottom-[clamp(1.75rem,4vw,2.5rem)] right-[clamp(1.75rem,4vw,2.5rem)] flex flex-col items-end space-y-0.5">
+                  <button
+                    type="button"
+                    className="dotted-link text-sm uppercase tracking-[0.08em] text-black/50 bg-transparent border-0 cursor-pointer p-0"
+                    onClick={handleResumeClick}
+                  >
+                    RESUME
+                  </button>
+                  <button
+                    type="button"
+                    className="dotted-link text-sm uppercase tracking-[0.08em] text-black/50 bg-transparent border-0 cursor-pointer p-0"
+                    onClick={handleContactClick}
+                  >
+                    CONTACT
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -279,6 +312,98 @@ export default function App() {
               instagram.com/dewepto
             </a>
           </div>
+          <button
+            type="button"
+            onClick={handleClosePanel}
+            className="self-start underline bg-transparent border-0 text-white/50 cursor-pointer p-0 text-sm"
+          >
+            ../
+          </button>
+        </div>
+      </div>
+      {/* Resume Panel */}
+      <div
+        className={`note-panel fixed inset-0 bg-black text-white transition-opacity duration-300 flex items-start justify-center overflow-y-auto ${
+          showResume ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+      >
+        <div className="max-w-lg w-full px-6 py-16 flex flex-col gap-10">
+          <div className="space-y-1">
+            <h1 className="text-lg font-bold tracking-wide">Rawnak Hossain Deepto</h1>
+            <p className="text-xs text-white/50 tracking-wide">
+              +61 491 754 905 | rawnakd11@gmail.com | github.com/rawnak-rr | linkedin.com/in/xdef
+            </p>
+          </div>
+
+          <div className="space-y-1">
+            <h2 className="text-sm font-bold tracking-wide uppercase text-white/70 border-b border-white/20 pb-1">Summary</h2>
+            <p className="text-sm leading-relaxed tracking-wide text-white/80">
+              Full-stack software developer with experience in React, Tailwind and Python. Skilled in UI/UX wireframing with Figma and passionate about creative work including content creation.
+            </p>
+          </div>
+
+          <div className="space-y-1">
+            <h2 className="text-sm font-bold tracking-wide uppercase text-white/70 border-b border-white/20 pb-1">Education</h2>
+            <div className="flex justify-between items-baseline">
+              <span className="text-sm font-bold tracking-wide text-white/90">University of New South Wales</span>
+              <span className="text-xs text-white/50 tracking-wide">Feb 2025 – Jan 2028</span>
+            </div>
+            <div className="flex justify-between items-baseline">
+              <span className="text-xs italic text-white/60 tracking-wide">Bachelor of Science in Computer Science</span>
+              <span className="text-xs text-white/50 tracking-wide">Sydney, Australia</span>
+            </div>
+            <p className="text-xs text-white/70 tracking-wide pl-3">• International Student Award for exceptional merit</p>
+          </div>
+
+          <div className="space-y-1">
+            <h2 className="text-sm font-bold tracking-wide uppercase text-white/70 border-b border-white/20 pb-1">Technical Skills</h2>
+            <p className="text-xs text-white/80 tracking-wide"><span className="font-bold text-white/90">Languages:</span> C, Python, JavaScript, TypeScript, SQL, HTML/CSS</p>
+            <p className="text-xs text-white/80 tracking-wide"><span className="font-bold text-white/90">Frameworks:</span> React, Spring Boot, Tailwind, GSAP</p>
+            <p className="text-xs text-white/80 tracking-wide"><span className="font-bold text-white/90">Tools:</span> Git, Docker, AWS, Vercel, Figma</p>
+          </div>
+
+          <div className="space-y-4">
+            <h2 className="text-sm font-bold tracking-wide uppercase text-white/70 border-b border-white/20 pb-1">Experience</h2>
+            {experience.map((job) => (
+              <div key={job.company} className="space-y-1">
+                <div className="flex justify-between items-baseline">
+                  <span className="text-sm font-bold tracking-wide text-white/90">{job.company}</span>
+                  <span className="text-xs text-white/50 tracking-wide">{job.date}</span>
+                </div>
+                <div className="flex justify-between items-baseline">
+                  <span className="text-xs italic text-white/60 tracking-wide">{job.role}</span>
+                  <span className="text-xs text-white/50 tracking-wide">{job.location}</span>
+                </div>
+                <ul className="space-y-0.5 pl-3">
+                  {job.points.map((point, i) => (
+                    <li key={i} className="text-xs text-white/70 tracking-wide">• {point}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+
+          <div className="space-y-4">
+            <h2 className="text-sm font-bold tracking-wide uppercase text-white/70 border-b border-white/20 pb-1">Activities</h2>
+            <div className="space-y-1">
+              <div className="flex justify-between items-baseline">
+                <span className="text-sm font-bold tracking-wide text-white/90">Cyclops Legion</span>
+                <span className="text-xs text-white/50 tracking-wide">Dec 2020 – Aug 2022</span>
+              </div>
+              <div className="flex justify-between items-baseline">
+                <span className="text-xs italic text-white/60 tracking-wide">Player</span>
+                <span className="text-xs text-white/50 tracking-wide">Singapore</span>
+              </div>
+              <ul className="space-y-0.5 pl-3">
+                <li className="text-xs text-white/70 tracking-wide">• Won CGL Season 3 and several other CS:GO tournaments</li>
+                <li className="text-xs text-white/70 tracking-wide">• Placed in the top 1% rank worldwide and recognized across the Asia-Pacific community</li>
+                <li className="text-xs text-white/70 tracking-wide">• Represented Bangladesh on international competitive stages</li>
+                <li className="text-xs text-white/70 tracking-wide">• Achieved runner-up and third-place finishes in 20+ tournaments</li>
+                <li className="text-xs text-white/70 tracking-wide">• Secured sponsorships by partnering with global tech firms such as Gigabyte and Aorus</li>
+              </ul>
+            </div>
+          </div>
+
           <button
             type="button"
             onClick={handleClosePanel}
