@@ -329,16 +329,9 @@ export default function App() {
       >
         <div className="max-w-lg w-full px-6 py-16 flex flex-col gap-10">
           <div className="space-y-1">
-            <h1 className="text-lg font-bold tracking-wide">Rawnak Hossain Deepto</h1>
-            <p className="text-xs text-white/50 tracking-wide">
-              +61 491 754 905 | rawnakd11@gmail.com | github.com/rawnak-rr | linkedin.com/in/xdef
-            </p>
-          </div>
-
-          <div className="space-y-1">
             <h2 className="text-sm font-bold tracking-wide uppercase text-white/70 border-b border-white/20 pb-1">Summary</h2>
             <p className="text-sm leading-relaxed tracking-wide text-white/80">
-              Full-stack software developer with experience in React, Tailwind and Python. Skilled in UI/UX wireframing with Figma and passionate about creative work including content creation.
+              Full-stack software developer with experience in React, Next and Python. Skilled in UI/UX wireframing with Figma and passionate about creative work.
             </p>
           </div>
 
@@ -352,11 +345,10 @@ export default function App() {
               <span className="text-xs italic text-white/60 tracking-wide">Bachelor of Science in Computer Science</span>
               <span className="text-xs text-white/50 tracking-wide">Sydney, Australia</span>
             </div>
-            <p className="text-xs text-white/70 tracking-wide pl-3">• International Student Award for exceptional merit</p>
           </div>
 
           <div className="space-y-1">
-            <h2 className="text-sm font-bold tracking-wide uppercase text-white/70 border-b border-white/20 pb-1">Technical Skills</h2>
+            <h2 className="text-sm font-bold tracking-wide uppercase text-white/70 border-b border-white/20 pb-1">Tech Stack</h2>
             <p className="text-xs text-white/80 tracking-wide"><span className="font-bold text-white/90">Languages:</span> C, Python, JavaScript, TypeScript, SQL, HTML/CSS</p>
             <p className="text-xs text-white/80 tracking-wide"><span className="font-bold text-white/90">Frameworks:</span> React, Spring Boot, Tailwind, GSAP</p>
             <p className="text-xs text-white/80 tracking-wide"><span className="font-bold text-white/90">Tools:</span> Git, Docker, AWS, Vercel, Figma</p>
