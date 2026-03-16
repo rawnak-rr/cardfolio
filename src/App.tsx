@@ -301,7 +301,7 @@ export default function App() {
               rel="noopener noreferrer"
               className="block text-white/80 hover:text-white transition-colors"
             >
-              linkedin.com/in/xdef
+              linkedin.com/in/xdefT
             </a>
             <a
               href="https://www.instagram.com/dewepto/"
@@ -330,16 +330,16 @@ export default function App() {
         <div className="max-w-lg w-full px-6 py-16 flex flex-col gap-10">
           <div className="space-y-1">
             <h2 className="text-sm font-bold tracking-wide uppercase text-white/70 border-b border-white/20 pb-1">Summary</h2>
-            <p className="text-sm leading-relaxed tracking-wide text-white/80">
-              Full-stack software developer with experience in React, Next and Python. Skilled in UI/UX wireframing with Figma and passionate about creative work.
-            </p>
+              <p className="text-sm leading-relaxed tracking-wide text-white/80">
+                Full-stack engineer experienced in building scalable systems from scratch, optimizing backend performance, and delivering end-to-end features used by thousands of users.
+              </p>
           </div>
 
           <div className="space-y-1">
             <h2 className="text-sm font-bold tracking-wide uppercase text-white/70 border-b border-white/20 pb-1">Education</h2>
             <div className="flex justify-between items-baseline">
               <span className="text-sm font-bold tracking-wide text-white/90">University of New South Wales</span>
-              <span className="text-xs text-white/50 tracking-wide">Feb 2025 – Jan 2028</span>
+              <span className="text-xs text-white/50 tracking-wide">2025 - 2028</span>
             </div>
             <div className="flex justify-between items-baseline">
               <span className="text-xs italic text-white/60 tracking-wide">Bachelor of Science in Computer Science</span>
@@ -349,8 +349,8 @@ export default function App() {
 
           <div className="space-y-1">
             <h2 className="text-sm font-bold tracking-wide uppercase text-white/70 border-b border-white/20 pb-1">Tech Stack</h2>
-            <p className="text-xs text-white/80 tracking-wide"><span className="font-bold text-white/90">Languages:</span> C, Python, JavaScript, TypeScript, SQL, HTML/CSS</p>
-            <p className="text-xs text-white/80 tracking-wide"><span className="font-bold text-white/90">Frameworks:</span> React, Spring Boot, Tailwind, GSAP</p>
+            <p className="text-xs text-white/80 tracking-wide"><span className="font-bold text-white/90">Languages:</span> TypeScript, JavaScript, Python, C, C++, Java, HTML/CSS</p>
+            <p className="text-xs text-white/80 tracking-wide"><span className="font-bold text-white/90">Frameworks:</span> React, Spring-Boot, Tailwind, GSAP</p>
             <p className="text-xs text-white/80 tracking-wide"><span className="font-bold text-white/90">Tools:</span> Git, Docker, AWS, Vercel, Figma</p>
           </div>
 
@@ -376,7 +376,7 @@ export default function App() {
           </div>
 
           <div className="space-y-4">
-            <h2 className="text-sm font-bold tracking-wide uppercase text-white/70 border-b border-white/20 pb-1">Activities</h2>
+            <h2 className="text-sm font-bold tracking-wide uppercase text-white/70 border-b border-white/20 pb-1">Hobbies</h2>
             <div className="space-y-1">
               <div className="flex justify-between items-baseline">
                 <span className="text-sm font-bold tracking-wide text-white/90">Cyclops Legion</span>
@@ -387,11 +387,8 @@ export default function App() {
                 <span className="text-xs text-white/50 tracking-wide">Singapore</span>
               </div>
               <ul className="space-y-0.5 pl-3">
-                <li className="text-xs text-white/70 tracking-wide">• Won CGL Season 3 and several other CS:GO tournaments</li>
-                <li className="text-xs text-white/70 tracking-wide">• Placed in the top 1% rank worldwide and recognized across the Asia-Pacific community</li>
-                <li className="text-xs text-white/70 tracking-wide">• Represented Bangladesh on international competitive stages</li>
-                <li className="text-xs text-white/70 tracking-wide">• Achieved runner-up and third-place finishes in 20+ tournaments</li>
-                <li className="text-xs text-white/70 tracking-wide">• Secured sponsorships by partnering with global tech firms such as Gigabyte and Aorus</li>
+                <li className="text-xs text-white/70 tracking-wide">• Won CGL Season 3 and 20+ CS:GO tournaments; placed top 1% worldwide and represented Bangladesh on international stages</li>
+                <li className="text-xs text-white/70 tracking-wide">• Secured sponsorships with Gigabyte and Aorus through competitive achievements across the Asia-Pacific community</li>
               </ul>
             </div>
           </div>
