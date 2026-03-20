@@ -1,5 +1,7 @@
 'use client';
 
+import { BackButton } from '@/app/components/back-button';
+
 type ContactProps = {
   isOpen: boolean;
   emailCopied: boolean;
@@ -40,13 +42,7 @@ export function Contact({ isOpen, emailCopied, onCopyEmail, onClose }: ContactPr
             instagram.com/dewepto
           </a>
         </div>
-        <button
-          type="button"
-          onClick={onClose}
-          className="self-start underline bg-transparent border-0 text-white/50 cursor-pointer p-0 text-sm"
-        >
-          ../
-        </button>
+        <BackButton onClick={onClose} />
       </div>
     </div>
   );

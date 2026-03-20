@@ -1,5 +1,7 @@
 'use client';
 
+import { BackButton } from '@/app/components/back-button';
+
 type ThoughtsProps = {
   isOpen: boolean;
   content: string;
@@ -15,13 +17,7 @@ export function Thoughts({ isOpen, content, onClose }: ThoughtsProps) {
     >
       <div className="max-w-md px-6 flex flex-col gap-8">
         <p className="text-sm leading-relaxed tracking-wide">{content}</p>
-        <button
-          type="button"
-          onClick={onClose}
-          className="self-start underline bg-transparent border-0 text-white/50 cursor-pointer p-0 text-sm"
-        >
-          ../
-        </button>
+        <BackButton onClick={onClose} />
       </div>
     </div>
   );

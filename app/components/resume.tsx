@@ -1,5 +1,6 @@
 'use client';
 
+import { BackButton } from '@/app/components/back-button';
 import type { ResumeData } from '@/src/data';
 
 type ResumeProps = {
@@ -106,13 +107,7 @@ export function Resume({ isOpen, resume, onClose }: ResumeProps) {
           ))}
         </div>
 
-        <button
-          type="button"
-          onClick={onClose}
-          className="self-start underline bg-transparent border-0 text-white/50 cursor-pointer p-0 text-sm"
-        >
-          ../
-        </button>
+        <BackButton onClick={onClose} />
       </div>
     </div>
   );
