@@ -18,6 +18,7 @@ export default function Page() {
 
   const featuredProject = sideProjects[0];
   const currentStudy = studies.find((s) => s.current) ?? studies[0];
+  const canFlipCard = !showNote && !showContact && !showResume;
 
   useEffect(() => {
     if (!cardRef.current) return;
@@ -166,16 +167,29 @@ export default function Page() {
     }, '-=0.1');
   };
 
+  const handleCardToggle = () => {
+    if (!canFlipCard) return;
+    setIsFlipped((flipped) => !flipped);
+  };
+
+  const handleCardKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    e.preventDefault();
+    handleCardToggle();
+  };
+
   return (
     <main className="min-h-screen flex flex-col items-center justify-center font-mono gap-6 px-6 py-12 overflow-hidden">
       <div ref={cardContainerRef} className="w-[min(90vw,420px)] [perspective:1600px] relative z-10">
-        <button
-          type="button"
+        <div
+          role="button"
+          tabIndex={0}
           className="card-button"
           onPointerEnter={handlePointerEnter}
           onPointerMove={handlePointerMove}
           onPointerLeave={handlePointerLeave}
-          onClick={() => !showNote && !showContact && !showResume && setIsFlipped((f) => !f)}
+          onClick={handleCardToggle}
+          onKeyDown={handleCardKeyDown}
           aria-label={isFlipped ? 'Show front of card' : 'Show back of card'}
         >
           <div ref={cardRef} className="flip-card">
@@ -256,7 +270,7 @@ export default function Page() {
               </div>
             </div>
           </div>
-        </button>
+        </div>
       </div>
 
       {/* Note Panel */}
