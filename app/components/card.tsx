@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import type { KeyboardEvent, PointerEvent, RefObject } from 'react';
 
 type CardProps = {
@@ -17,7 +18,6 @@ type CardProps = {
   onPointerLeave: () => void;
   onResumeClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
   onContactClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
-  onThoughtsClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
 export function Card({
@@ -35,7 +35,6 @@ export function Card({
   onPointerLeave,
   onResumeClick,
   onContactClick,
-  onThoughtsClick,
 }: CardProps) {
   return (
     <div ref={cardContainerRef} className="w-[min(90vw,420px)] [perspective:1600px] relative z-10">
@@ -107,13 +106,13 @@ export function Card({
                     </p>
                   </div>
                   <div className="flex flex-col items-end space-y-0.5">
-                    <button
-                      type="button"
+                    <Link
+                      href="/thoughts"
                       className="dotted-link text-sm uppercase tracking-[0.08em] text-black/50 bg-transparent border-0 cursor-pointer p-0"
-                      onClick={onThoughtsClick}
+                      onClick={(e) => e.stopPropagation()}
                     >
                       THOUGHTS
-                    </button>
+                    </Link>
                     <a
                       href="https://github.com/rawnak-rr"
                       target="_blank"

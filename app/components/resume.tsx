@@ -1,6 +1,6 @@
 'use client';
 
-import { BackButton } from '@/app/components/back-button';
+import { BackButton } from '@/app/components/backButton';
 import type { ResumeData } from '@/src/data';
 
 type ResumeProps = {

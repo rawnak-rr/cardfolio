@@ -35,6 +35,14 @@ export type ResumeData = {
   hobbies: ResumeHobbyItem[];
 };
 
+export type ThoughtCard = {
+  slug: string;
+  title: string;
+  date: string;
+  excerpt: string;
+  content: string;
+};
+
 export const profile = {
   name: 'rawnak',
   role: 'fullstack developer',
@@ -118,3 +126,60 @@ export const resume: ResumeData = {
     },
   ],
 };
+
+export const thoughts: ThoughtCard[] = [
+  {
+    slug: 'thinking-too-much',
+    title: 'Thinking Too Much',
+    date: 'March 2026',
+    excerpt:
+      'i probably think too much. this is something i’ll keep updating randomly whenever i feel like writing something i thought about.',
+    content:
+      'i probably think too much. this is something i’ll keep updating randomly whenever i feel like writing something i thought about. it’s directly linked to my notes so have fun coming across random thoughts of mine.',
+  },
+  {
+    slug: 'shipping-vs-polishing',
+    title: 'Shipping vs Polishing',
+    date: 'February 2026',
+    excerpt:
+      'there is a point where polishing stops being craft and starts being a way to delay putting something in front of people.',
+    content:
+      'there is a point where polishing stops being craft and starts being a way to delay putting something in front of people. most of the time users would rather feel momentum than witness perfection. i keep reminding myself that feedback arrives from shipping, not from staring at the same feature for two extra nights.',
+  },
+  {
+    slug: 'building-for-feel',
+    title: 'Building for Feel',
+    date: 'January 2026',
+    excerpt:
+      'some products are technically correct and still feel wrong. the small interactions usually decide whether people come back.',
+    content:
+      'some products are technically correct and still feel wrong. the small interactions usually decide whether people come back. speed matters, but so does rhythm. spacing matters, but so does what a screen implies before anyone reads a single word. that difference is hard to measure and obvious to users.',
+  },
+  {
+    slug: 'sports-and-systems',
+    title: 'Sports and Systems',
+    date: 'December 2025',
+    excerpt:
+      'sports apps are never just about booking or scores. they are social systems pretending to be software products.',
+    content:
+      'sports apps are never just about booking or scores. they are social systems pretending to be software products. once people start organizing around them, the product becomes about trust, pacing, reliability, and group behavior. the software is only the visible layer.',
+  },
+  {
+    slug: 'learning-in-public',
+    title: 'Learning in Public',
+    date: 'November 2025',
+    excerpt:
+      'writing things down makes half-formed thoughts useful. even if the conclusion is weak, the trail is usually worth keeping.',
+    content:
+      'writing things down makes half-formed thoughts useful. even if the conclusion is weak, the trail is usually worth keeping. i think people underestimate how often clarity comes after expression instead of before it.',
+  },
+  {
+    slug: 'what-i-notice',
+    title: 'What I Notice',
+    date: 'October 2025',
+    excerpt:
+      'i pay attention to interfaces that reveal intent quickly. the best ones tell you what they are before you learn the rules.',
+    content:
+      'i pay attention to interfaces that reveal intent quickly. the best ones tell you what they are before you learn the rules. when something is designed well, you can feel the confidence in it. when it is not, every click sounds like a question.',
+  },
+];

@@ -5,13 +5,10 @@ import gsap from 'gsap';
 import { Card } from '@/app/components/card';
 import { Contact } from '@/app/components/contact';
 import { Resume } from '@/app/components/resume';
-import { Thoughts } from '@/app/components/thoughts';
 import { profile, resume, studies } from '@/src/data';
-import { noteContent } from '@/src/noteContent';
 
 export default function Page() {
   const [isFlipped, setIsFlipped] = useState(false);
-  const [showNote, setShowNote] = useState(false);
   const [showContact, setShowContact] = useState(false);
   const [showResume, setShowResume] = useState(false);
   const [emailCopied, setEmailCopied] = useState(false);
@@ -21,7 +18,7 @@ export default function Page() {
   const isMousePointer = useRef(false);
 
   const currentStudy = studies.find((s) => s.current) ?? studies[0];
-  const canFlipCard = !showNote && !showContact && !showResume;
+  const canFlipCard = !showContact && !showResume;
 
   useEffect(() => {
     if (!cardRef.current) return;
@@ -83,28 +80,6 @@ export default function Page() {
     });
   };
 
-  const handleNoteClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (!cardContainerRef.current || !cardRef.current) return;
-
-    const tl = gsap.timeline({
-      onComplete: () => setShowNote(true)
-    });
-
-    tl.to(cardRef.current, {
-      rotateX: 0,
-      rotateY: rotationState.current.base,
-      rotateZ: 90,
-      duration: 0.6,
-      ease: 'power3.inOut',
-    })
-    .to(cardContainerRef.current, {
-      y: '-250%',
-      duration: 0.6,
-      ease: 'power2.in',
-    }, '-=0.1');
-  };
-
   const handleResumeClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!cardContainerRef.current || !cardRef.current) return;
@@ -152,7 +127,6 @@ export default function Page() {
   const handleClosePanel = () => {
     if (!cardContainerRef.current || !cardRef.current) return;
 
-    setShowNote(false);
     setShowContact(false);
     setShowResume(false);
 
@@ -198,9 +172,7 @@ export default function Page() {
         onPointerLeave={handlePointerLeave}
         onResumeClick={handleResumeClick}
         onContactClick={handleContactClick}
-        onThoughtsClick={handleNoteClick}
       />
-      <Thoughts isOpen={showNote} content={noteContent} onClose={handleClosePanel} />
       <Contact
         isOpen={showContact}
         emailCopied={emailCopied}
