@@ -1,3 +1,40 @@
+export type ExperienceItem = {
+  company: string;
+  role: string;
+  date: string;
+  location: string;
+  points: string[];
+};
+
+export type ResumeEducationItem = {
+  school: string;
+  date: string;
+  degree: string;
+  location: string;
+};
+
+export type ResumeTechStack = {
+  languages: string[];
+  frameworks: string[];
+  tools: string[];
+};
+
+export type ResumeHobbyItem = {
+  title: string;
+  date: string;
+  role: string;
+  location: string;
+  points: string[];
+};
+
+export type ResumeData = {
+  summary: string;
+  education: ResumeEducationItem[];
+  techStack: ResumeTechStack;
+  experience: ExperienceItem[];
+  hobbies: ResumeHobbyItem[];
+};
+
 export const profile = {
   name: 'rawnak',
   role: 'fullstack developer',
@@ -13,7 +50,7 @@ export const sideProjects = [
   },
 ];
 
-export const experience = [
+export const experience: ExperienceItem[] = [
   {
     company: 'Leibniz Education',
     role: 'Software Engineer',
@@ -50,3 +87,34 @@ export const studies = [
     current: true,
   },
 ];
+
+export const resume: ResumeData = {
+  summary:
+    'Full-stack engineer experienced in building scalable systems from scratch, optimizing backend performance, and delivering end-to-end features used by thousands of users.',
+  education: [
+    {
+      school: 'University of New South Wales',
+      date: '2025 - 2028',
+      degree: 'Bachelor of Science in Computer Science',
+      location: 'Sydney, Australia',
+    },
+  ],
+  techStack: {
+    languages: ['TypeScript', 'JavaScript', 'Python', 'C', 'C++', 'Java', 'HTML/CSS'],
+    frameworks: ['React', 'Spring-Boot', 'Tailwind', 'GSAP'],
+    tools: ['Git', 'Docker', 'AWS', 'Vercel', 'Figma'],
+  },
+  experience,
+  hobbies: [
+    {
+      title: 'Cyclops Legion',
+      date: 'Dec 2020 – Aug 2022',
+      role: 'Player',
+      location: 'Singapore',
+      points: [
+        'Won CGL Season 3 and 20+ CS:GO tournaments; placed top 1% worldwide and represented Bangladesh on international stages',
+        'Secured sponsorships with Gigabyte and Aorus through competitive achievements across the Asia-Pacific community',
+      ],
+    },
+  ],
+};
