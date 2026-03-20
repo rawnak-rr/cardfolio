@@ -1,0 +1,124 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-mono: var(--font-mono), 'Space Mono', monospace;
+}
+
+.card-button {
+  position: relative;
+  display: block;
+  aspect-ratio: 3 / 2;
+  width: 100%;
+  cursor: pointer;
+  border-radius: 1.75rem;
+  border: 0;
+}
+
+.dotted-link {
+  text-decoration: none;
+  border-bottom: 2px dotted currentColor;
+  padding-bottom: 2px;
+  transition: opacity 0.2s ease;
+}
+
+.dotted-link:hover {
+  opacity: 0.7;
+}
+
+.flip-card {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  border-radius: 1.75rem;
+  transform-style: preserve-3d;
+  box-shadow:
+    0 30px 60px -24px rgba(17, 24, 39, 0.45),
+    0 18px 30px -20px rgba(17, 24, 39, 0.3);
+}
+
+@media (prefers-color-scheme: dark) {
+  .flip-card {
+    box-shadow:
+      0 40px 70px -24px rgba(15, 23, 42, 0.75),
+      0 22px 32px -22px rgba(15, 23, 42, 0.55);
+  }
+}
+
+.card-face {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  border-radius: inherit;
+  padding: clamp(1.75rem, 4vw, 2.5rem);
+  backface-visibility: hidden;
+}
+
+.card-front {
+  background-color: #ff6f00;
+  color: white;
+  border: 1px solid rgba(255, 200, 150, 0.55);
+  box-shadow:
+    inset 0 12px 24px -20px rgba(255, 255, 255, 0.6),
+    inset 0 -16px 28px -18px rgba(84, 31, 0, 0.28);
+}
+
+@media (prefers-color-scheme: dark) {
+  .card-front {
+    background-color: #cc5200;
+    color: #fff7ed;
+    box-shadow:
+      inset 0 14px 30px -20px rgba(255, 186, 140, 0.3),
+      inset 0 -16px 30px -22px rgba(20, 7, 0, 0.55);
+  }
+}
+
+.card-back {
+  background-color: #f05600;
+  color: #fff7ed;
+  border: 1px solid rgba(210, 92, 32, 0.55);
+  transform: rotateY(180deg);
+  box-shadow:
+    inset 0 10px 22px -18px rgba(255, 255, 255, 0.5),
+    inset 0 -14px 24px -18px rgba(74, 24, 0, 0.4);
+}
+
+@media (prefers-color-scheme: dark) {
+  .card-back {
+    background-color: #cc5200;
+    box-shadow:
+      inset 0 12px 28px -18px rgba(255, 185, 120, 0.25),
+      inset 0 -16px 30px -20px rgba(20, 7, 0, 0.65);
+  }
+}
+
+.noise-overlay {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  border-radius: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  opacity: 0.9;
+  background-blend-mode: soft-light, overlay;
+  background-image:
+    linear-gradient(0deg, rgba(255, 255, 255, 0.04), rgba(17, 17, 17, 0.12)),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.18'/%3E%3C/svg%3E");
+  background-size: 100% 100%, 160px 160px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .noise-overlay {
+    border-color: rgba(255, 255, 255, 0.1);
+    opacity: 0.8;
+  }
+}
+
+/* Note panel */
+.note-panel {
+  z-index: 5;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
