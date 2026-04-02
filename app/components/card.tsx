@@ -37,7 +37,7 @@ export function Card({
   onContactClick,
 }: CardProps) {
   return (
-    <div ref={cardContainerRef} className="w-[min(90vw,420px)] [perspective:1600px] relative z-10">
+    <div ref={cardContainerRef} className="w-[min(90vw,420px)] perspective-[1600px] relative z-10">
       <div
         role="button"
         tabIndex={0}
@@ -69,14 +69,14 @@ export function Card({
               <div className="absolute bottom-[clamp(1.75rem,4vw,2.5rem)] right-[clamp(1.75rem,4vw,2.5rem)] flex flex-col items-end space-y-0.5">
                 <button
                   type="button"
-                  className="dotted-link text-sm uppercase tracking-[0.08em] text-black/50 bg-transparent border-0 cursor-pointer p-0"
+                  className="dotted-link text-sm uppercase tracking-[0.08em] text-black/50 bg-transparent border-0 cursor-pointer px-1 py-0.5"
                   onClick={onResumeClick}
                 >
                   RESUME
                 </button>
                 <button
                   type="button"
-                  className="dotted-link text-sm uppercase tracking-[0.08em] text-black/50 bg-transparent border-0 cursor-pointer p-0"
+                  className="dotted-link text-sm uppercase tracking-[0.08em] text-black/50 bg-transparent border-0 cursor-pointer px-1 py-0.5"
                   onClick={onContactClick}
                 >
                   CONTACT
@@ -108,7 +108,7 @@ export function Card({
                   <div className="flex flex-col items-end space-y-0.5">
                     <Link
                       href="/thoughts"
-                      className="dotted-link text-sm uppercase tracking-[0.08em] text-black/50 bg-transparent border-0 cursor-pointer p-0"
+                      className="dotted-link text-sm uppercase tracking-[0.08em] text-black/50 bg-transparent border-0 cursor-pointer px-1 py-0.5"
                       onClick={(e) => e.stopPropagation()}
                     >
                       THOUGHTS
@@ -117,7 +117,7 @@ export function Card({
                       href="https://github.com/rawnak-rr"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="dotted-link text-sm uppercase tracking-[0.08em] text-black/50"
+                      className="dotted-link text-sm uppercase tracking-[0.08em] text-black/50 px-1 py-0.5"
                       onClick={(e) => e.stopPropagation()}
                     >
                       GITHUB
