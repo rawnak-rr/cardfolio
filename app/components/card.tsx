@@ -11,7 +11,7 @@ type CardProps = {
   profileRole: string;
   currentStudyTitle: string;
   canFlipCard: boolean;
-  onCardToggle: () => void;
+  onCardToggle: (e: React.MouseEvent<HTMLDivElement>) => void;
   onCardKeyDown: (e: KeyboardEvent<HTMLDivElement>) => void;
   onPointerEnter: (e: PointerEvent<HTMLDivElement>) => void;
   onPointerMove: (e: PointerEvent<HTMLDivElement>) => void;

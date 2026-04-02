@@ -33,16 +33,15 @@ export default function Page() {
     };
   }, []);
 
-  useEffect(() => {
+  const animateFlip = () => {
     if (!cardRef.current) return;
-    rotationState.current.base = isFlipped ? 180 : 0;
     gsap.to(cardRef.current, {
       rotateY: rotationState.current.base + rotationState.current.tiltY,
       duration: 1.1,
       ease: 'power4.inOut',
       overwrite: 'auto',
     });
-  }, [isFlipped]);
+  };
 
   const handlePointerEnter = (e: React.PointerEvent) => {
     isMousePointer.current = e.pointerType === 'mouse';
@@ -144,15 +143,23 @@ export default function Page() {
     }, '-=0.1');
   };
 
-  const handleCardToggle = () => {
+  const handleCardToggle = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!canFlipCard) return;
-    setIsFlipped((flipped) => !flipped);
+    const bounds = e.currentTarget.getBoundingClientRect();
+    const x = (e.clientX - bounds.left) / bounds.width;
+    const direction = x < 0.5 ? -1 : 1;
+    rotationState.current.base += 180 * direction;
+    setIsFlipped((f) => !f);
+    animateFlip();
   };
 
   const handleCardKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key !== 'Enter' && e.key !== ' ') return;
     e.preventDefault();
-    handleCardToggle();
+    if (!canFlipCard) return;
+    rotationState.current.base += 180;
+    setIsFlipped((f) => !f);
+    animateFlip();
   };
 
   return (
