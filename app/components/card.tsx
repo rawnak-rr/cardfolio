@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import type { KeyboardEvent, PointerEvent, RefObject } from 'react';
 
 type CardProps = {
@@ -16,8 +15,9 @@ type CardProps = {
   onPointerEnter: (e: PointerEvent<HTMLDivElement>) => void;
   onPointerMove: (e: PointerEvent<HTMLDivElement>) => void;
   onPointerLeave: () => void;
-  onResumeClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onWorkClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
   onContactClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onThoughtsClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
 export function Card({
@@ -33,93 +33,101 @@ export function Card({
   onPointerEnter,
   onPointerMove,
   onPointerLeave,
-  onResumeClick,
+  onWorkClick,
   onContactClick,
+  onThoughtsClick,
 }: CardProps) {
   return (
-    <div ref={cardContainerRef} className="w-[min(90vw,420px)] perspective-[1600px] relative z-10">
+    <div
+      ref={cardContainerRef}
+      className='w-[min(90vw,420px)] perspective-[1600px] relative z-10'>
       <div
-        role="button"
+        role='button'
         tabIndex={0}
-        className="card-button"
+        className='card-button'
         onPointerEnter={onPointerEnter}
         onPointerMove={onPointerMove}
         onPointerLeave={onPointerLeave}
         onClick={onCardToggle}
         onKeyDown={onCardKeyDown}
         aria-label={isFlipped ? 'Show front of card' : 'Show back of card'}
-        aria-disabled={!canFlipCard}
-      >
-        <div ref={cardRef} className="flip-card">
-          <div className="noise-overlay" />
+        aria-disabled={!canFlipCard}>
+        <div
+          ref={cardRef}
+          className='flip-card'>
+          <div className='noise-overlay' />
 
-          <div className="card-face card-front">
-            <div className="flex h-full flex-col justify-end">
-              <div className="space-y-0.5 text-left">
-                <h1 className="text-base font-bold uppercase tracking-[0.08em] text-black/90">
+          <div className='card-face card-front'>
+            <div className='flex h-full flex-col justify-end'>
+              <div className='space-y-0.5 text-left'>
+                <h1 className='text-base font-bold uppercase tracking-[0.08em] text-black/90'>
                   {profileName.toUpperCase()}
                 </h1>
-                <p className="text-sm uppercase tracking-[0.08em] text-black/50">
-                  {profileRole.toUpperCase()}.
+                <p className='text-sm uppercase tracking-[0.08em] text-black/50'>
+                  {profileRole.split(' ').map((word, i) => (
+                    <span key={i}>
+                      {i > 0 && ' '}
+                      <span className={['fullstack', 'unsw'].includes(word.toLowerCase()) ? 'font-bold text-black/90' : ''}>
+                        {word.toUpperCase()}
+                      </span>
+                    </span>
+                  ))}
                 </p>
-                <p className="text-sm uppercase tracking-[0.08em] text-black/50">
-                  {currentStudyTitle}.
+                <p className='text-sm uppercase tracking-[0.08em] text-black/50'>
+                  CompSci <span className='font-sans'>@</span>
+                  <span className='font-bold text-black/90'>{currentStudyTitle}</span>
                 </p>
               </div>
-              <div className="absolute bottom-[clamp(1.75rem,4vw,2.5rem)] right-[clamp(1.75rem,4vw,2.5rem)] flex flex-col items-end space-y-0.5">
+              <div className='absolute bottom-[clamp(1.75rem,4vw,2.5rem)] right-[clamp(1.75rem,4vw,2.5rem)] flex flex-col items-end space-y-0.5'>
                 <button
-                  type="button"
-                  className="dotted-link text-sm uppercase tracking-[0.08em] text-black/50 bg-transparent border-0 cursor-pointer px-1 py-0.5"
-                  onClick={onResumeClick}
-                >
-                  RESUME
+                  type='button'
+                  className='dotted-link text-sm uppercase tracking-[0.08em] text-black/50 bg-transparent border-0 cursor-pointer px-1 py-0.5'
+                  onClick={onWorkClick}>
+                  WORK
                 </button>
                 <button
-                  type="button"
-                  className="dotted-link text-sm uppercase tracking-[0.08em] text-black/50 bg-transparent border-0 cursor-pointer px-1 py-0.5"
-                  onClick={onContactClick}
-                >
+                  type='button'
+                  className='dotted-link text-sm uppercase tracking-[0.08em] text-black/50 bg-transparent border-0 cursor-pointer px-1 py-0.5'
+                  onClick={onContactClick}>
                   CONTACT
                 </button>
               </div>
             </div>
           </div>
 
-          <div className="card-face card-back">
-            <div className="relative z-10 flex h-full flex-col justify-end">
-              <div className="space-y-2 text-left">
-                <div className="space-y-0.5">
-                  <h2 className="text-base font-bold uppercase tracking-[0.08em] text-black/90">
+          <div className='card-face card-back'>
+            <div className='relative z-10 flex h-full flex-col justify-end'>
+              <div className='space-y-2 text-left'>
+                <div className='space-y-0.5'>
+                  <h2 className='text-base font-bold uppercase tracking-[0.08em] text-black/90'>
                     LEIBNIZ EDUCATION
                   </h2>
-                  <p className="text-sm uppercase tracking-[0.08em] text-black/50">
-                    SOFTWARE ENGINEER.
+                  <p className='text-sm uppercase tracking-[0.08em] text-black/50'>
+                    SOFTWARE ENGINEER
                   </p>
                 </div>
-                <div className="flex justify-between items-end">
-                  <div className="space-y-0.5">
-                    <h2 className="text-base font-bold uppercase tracking-[0.08em] text-black/90">
-                      TURFINDER*
+                <div className='flex justify-between items-end'>
+                  <div className='space-y-0.5'>
+                    <h2 className='text-base font-bold uppercase tracking-[0.08em] text-black/90'>
+                      TURFINDER
                     </h2>
-                    <p className="text-sm uppercase tracking-[0.08em] text-black/50">
-                      FOUNDER.
+                    <p className='text-sm uppercase tracking-[0.08em] text-black/50'>
+                      FOUNDER
                     </p>
                   </div>
-                  <div className="flex flex-col items-end space-y-0.5">
-                    <Link
-                      href="/thoughts"
-                      className="dotted-link text-sm uppercase tracking-[0.08em] text-black/50 bg-transparent border-0 cursor-pointer px-1 py-0.5"
-                      onClick={(e) => e.stopPropagation()}
-                    >
+                  <div className='flex flex-col items-end space-y-0.5'>
+                    <button
+                      type='button'
+                      className='dotted-link text-sm uppercase tracking-[0.08em] text-black/50 bg-transparent border-0 cursor-pointer px-1 py-0.5'
+                      onClick={onThoughtsClick}>
                       THOUGHTS
-                    </Link>
+                    </button>
                     <a
-                      href="https://github.com/rawnak-rr"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="dotted-link text-sm uppercase tracking-[0.08em] text-black/50 px-1 py-0.5"
-                      onClick={(e) => e.stopPropagation()}
-                    >
+                      href='https://github.com/rawnak-rr'
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      className='dotted-link text-sm uppercase tracking-[0.08em] text-black/50 px-1 py-0.5'
+                      onClick={(e) => e.stopPropagation()}>
                       GITHUB
                     </a>
                   </div>

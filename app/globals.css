@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 
 @theme {
-  --font-mono: var(--font-mono), 'Space Mono', monospace;
+  --font-mono: var(--font-space-mono), 'Space Mono', monospace;
 }
 
 .card-button {
@@ -120,5 +120,8 @@
 /* Note panel */
 .note-panel {
   z-index: 50;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+.work-panel {
+  z-index: 50;
 }

@@ -5,7 +5,7 @@ import './globals.css';
 const spaceMono = Space_Mono({
   weight: ['400', '700'],
   subsets: ['latin'],
-  variable: '--font-mono',
+  variable: '--font-space-mono',
 });
 
 export const metadata: Metadata = {
@@ -19,9 +19,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body
-        className={`${spaceMono.variable} bg-white text-neutral-900 dark:bg-neutral-950 dark:text-neutral-100`}
-      >
+      <body className={`${spaceMono.className} ${spaceMono.variable} bg-white text-neutral-900 dark:bg-neutral-950 dark:text-neutral-100`}>
         {children}
       </body>
     </html>
