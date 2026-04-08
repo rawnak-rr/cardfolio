@@ -2,7 +2,8 @@
 
 import type { KeyboardEvent, PointerEvent, RefObject } from 'react';
 
-const headingClass = 'text-base font-bold uppercase tracking-[0.08em] text-black/90';
+const headingClass =
+  'text-base font-bold uppercase tracking-[0.08em] text-black/90';
 const labelClass = 'text-sm uppercase tracking-[0.08em] text-black/50';
 const linkClass =
   'dotted-link text-sm uppercase tracking-[0.08em] text-black/50 bg-transparent border-0 cursor-pointer px-1 py-0.5';
@@ -64,14 +65,17 @@ export function Card({
             <div className='noise-overlay' />
             <div className='flex h-full flex-col justify-end'>
               <div className='space-y-0.5 text-left'>
-                <h1 className={headingClass}>
-                  {profileName}
-                </h1>
+                <h1 className={headingClass}>{profileName}</h1>
                 <p className={labelClass}>
                   {profileRole.split(' ').map((word, i) => (
                     <span key={i}>
                       {i > 0 && ' '}
-                      <span className={['fullstack', 'unsw'].includes(word.toLowerCase()) ? 'font-bold text-black/90' : ''}>
+                      <span
+                        className={
+                          ['fullstack', 'unsw'].includes(word.toLowerCase())
+                            ? 'font-bold text-black/90'
+                            : ''
+                        }>
                         {word.toUpperCase()}
                       </span>
                     </span>
@@ -79,14 +83,22 @@ export function Card({
                 </p>
                 <p className={labelClass}>
                   CompSci <span className='font-sans'>@</span>
-                  <span className='font-bold text-black/90'>{currentStudyTitle}</span>
+                  <span className='font-bold text-black/90'>
+                    {currentStudyTitle}
+                  </span>
                 </p>
               </div>
               <div className='absolute bottom-[clamp(1.75rem,4vw,2.5rem)] right-[clamp(1.75rem,4vw,2.5rem)] flex flex-col items-end space-y-0.5'>
-                <button type='button' className={linkClass} onClick={onWorkClick}>
+                <button
+                  type='button'
+                  className={linkClass}
+                  onClick={onWorkClick}>
                   WORK
                 </button>
-                <button type='button' className={linkClass} onClick={onContactClick}>
+                <button
+                  type='button'
+                  className={linkClass}
+                  onClick={onContactClick}>
                   CONTACT
                 </button>
               </div>
@@ -101,23 +113,24 @@ export function Card({
                   <div className='space-y-2 pointer-events-none select-none'>
                     <div className='space-y-0.5'>
                       <h2 className={headingClass}>
-                        LEIBNIZ EDUCATION
+                        UNSW REDBACK RACING (Formula SAE)
                       </h2>
-                      <p className={labelClass}>
-                        SOFTWARE ENGINEER
-                      </p>
+                      <p className={labelClass}>SOFTWARE ENGINEER</p>
                     </div>
                     <div className='space-y-0.5'>
-                      <h2 className={headingClass}>
-                        TURFINDER
-                      </h2>
-                      <p className={labelClass}>
-                        FOUNDER
-                      </p>
+                      <h2 className={headingClass}>LEIBNIZ EDUCATION</h2>
+                      <p className={labelClass}>SOFTWARE ENGINEER</p>
+                    </div>
+                    <div className='space-y-0.5'>
+                      <h2 className={headingClass}>TURFINDER</h2>
+                      <p className={labelClass}>FOUNDER</p>
                     </div>
                   </div>
                   <div className='flex flex-col items-end space-y-0.5'>
-                    <button type='button' className={linkClass} onClick={onThoughtsClick}>
+                    <button
+                      type='button'
+                      className={linkClass}
+                      onClick={onThoughtsClick}>
                       THOUGHTS
                     </button>
                     <a

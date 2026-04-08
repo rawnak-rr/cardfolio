@@ -182,6 +182,9 @@ export function HomeClient({ workItems }: HomeClientProps) {
         onContactClick={openPanel('contact')}
         onThoughtsClick={openPanel('thoughts')}
       />
+      <p className='text-xs uppercase tracking-wide text-neutral-400 dark:text-neutral-600'>
+        tap to flip
+      </p>
       <Thoughts isOpen={activePanel === 'thoughts'} content={noteContent} onClose={handleClosePanel} />
       <Contact isOpen={activePanel === 'contact'} onClose={handleClosePanel} />
       <Work isOpen={activePanel === 'work'} items={workItems} onClose={handleClosePanel} />
