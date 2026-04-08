@@ -27,48 +27,34 @@ export function Work({ isOpen, items, onClose }: WorkProps) {
 
             return (
               <section
-                key={`${item.company}-${item.date}`}
+                key={item.company}
                 className='border-b border-white/10 pb-4 last:border-b-0'>
                 <button
                   type='button'
-                  className='flex w-full items-start justify-between gap-4 text-left'
+                  className='w-full text-left'
                   onClick={() =>
                     setOpenCompany(isExpanded ? '' : item.company)
                   }>
-                  <div className='min-w-0'>
-                    <div className='flex items-center gap-2 leading-none text-white/92'>
+                  <div className='flex items-start justify-between gap-4'>
+                    <div className='flex items-center gap-2 text-sm leading-none text-white/92'>
                       <span className='text-white/42'>
                         {isExpanded ? '[-]' : '[+]'}
                       </span>
                       <span className='uppercase'>{item.company}</span>
                     </div>
-                    {isExpanded ? (
-                      <p className='mt-1.5 text-[0.64rem] uppercase tracking-[0.08em] text-white/42'>
-                        {item.role}
-                      </p>
-                    ) : null}
+                    <span className='shrink-0 pt-0.5 text-xs text-white/42'>
+                      {item.date}
+                    </span>
                   </div>
-                  <span className='shrink-0 pt-0.5 text-right text-[clamp(0.72rem,1.1vw,0.88rem)] text-white/55'>
-                    {item.date}
-                  </span>
+                  <p className='mt-1.5 pl-7 text-xs uppercase tracking-[0.08em] text-white/42 sm:pl-8'>
+                    {item.role}
+                  </p>
                 </button>
 
                 {isExpanded ? (
-                  <div className='mt-3 space-y-2 pl-7 sm:pl-8'>
-                    <p className='text-[0.64rem] uppercase tracking-[0.08em] text-white/42'>
-                      {item.location}
-                    </p>
-                    <ul className='space-y-2 text-[0.75rem] leading-5.5 text-white/72 sm:text-[0.8rem]'>
-                      {item.points.map((point) => (
-                        <li
-                          key={point}
-                          className='flex gap-3'>
-                          <span className='text-[#8faeff]'>$</span>
-                          <span>{point}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                  <p className='mt-3 pl-7 text-sm leading-relaxed text-white/62 sm:pl-8'>
+                    {item.summary}
+                  </p>
                 ) : null}
               </section>
             );
@@ -76,10 +62,7 @@ export function Work({ isOpen, items, onClose }: WorkProps) {
         </div>
 
         <div className='pt-5'>
-          <BackButton
-            onClick={onClose}
-            tone='light'
-          />
+          <BackButton onClick={onClose} tone='light' />
         </div>
       </div>
     </div>
