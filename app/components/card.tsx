@@ -112,10 +112,8 @@ export function Card({
                 <div className='flex justify-between items-end'>
                   <div className='space-y-2 pointer-events-none select-none'>
                     <div className='space-y-0.5'>
-                      <h2 className={headingClass}>
-                        UNSW REDBACK RACING (Formula SAE)
-                      </h2>
-                      <p className={labelClass}>SOFTWARE ENGINEER</p>
+                      <h2 className={headingClass}>UNSW REDBACK RACING</h2>
+                      <p className={labelClass}>SOFTWARE ENGINEER, VA</p>
                     </div>
                     <div className='space-y-0.5'>
                       <h2 className={headingClass}>LEIBNIZ EDUCATION</h2>

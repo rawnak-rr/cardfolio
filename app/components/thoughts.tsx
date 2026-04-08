@@ -16,11 +16,15 @@ export function Thoughts({ isOpen, content, onClose }: ThoughtsProps) {
           ? 'opacity-100 pointer-events-auto'
           : 'opacity-0 pointer-events-none'
       }`}>
-      <div className='max-w-md px-6 flex flex-col gap-8'>
-        <p className='text-sm uppercase leading-relaxed tracking-wide'>
-          {content}
-        </p>
-        <BackButton onClick={onClose} />
+      <div className='flex h-[min(78vh,36rem)] w-[min(92vw,34rem)] flex-col px-5 py-5 sm:px-6 sm:py-6'>
+        <div className='flex-1 flex items-center justify-center'>
+          <p className='text-sm uppercase leading-relaxed tracking-wide'>
+            {content}
+          </p>
+        </div>
+        <div className='pt-5'>
+          <BackButton onClick={onClose} />
+        </div>
       </div>
     </div>
   );

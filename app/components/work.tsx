@@ -11,7 +11,7 @@ type WorkProps = {
 };
 
 export function Work({ isOpen, items, onClose }: WorkProps) {
-  const [openCompany, setOpenCompany] = useState(items[0]?.company ?? '');
+  const [openCompany, setOpenCompany] = useState('');
 
   return (
     <div
@@ -35,14 +35,14 @@ export function Work({ isOpen, items, onClose }: WorkProps) {
                   onClick={() =>
                     setOpenCompany(isExpanded ? '' : item.company)
                   }>
-                  <div className='flex items-start justify-between gap-4'>
-                    <div className='flex items-center gap-2 text-sm leading-none text-white/92'>
-                      <span className='text-white/42'>
+                  <div className='flex items-baseline justify-between gap-4 text-sm'>
+                    <div className='flex items-baseline gap-2 text-white/92'>
+                      <span className='text-xs text-white/42'>
                         {isExpanded ? '[-]' : '[+]'}
                       </span>
                       <span className='uppercase'>{item.company}</span>
                     </div>
-                    <span className='shrink-0 pt-0.5 text-xs text-white/42'>
+                    <span className='shrink-0 text-xs text-white/42'>
                       {item.date}
                     </span>
                   </div>

@@ -19,6 +19,14 @@ type HomeClientProps = {
 export function HomeClient({ workItems }: HomeClientProps) {
   const [isFlipped, setIsFlipped] = useState(false);
   const [activePanel, setActivePanel] = useState<Panel>(null);
+  const [cardStable, setCardStable] = useState(true);
+  const [showHint, setShowHint] = useState(false);
+
+  useEffect(() => {
+    if (!localStorage.getItem('hasFlipped')) {
+      setShowHint(true);
+    }
+  }, []);
   const cardRef = useRef<HTMLDivElement>(null);
   const cardContainerRef = useRef<HTMLDivElement>(null);
   const rotationState = useRef({ base: 0, tiltX: 0, tiltY: 0 });
@@ -47,6 +55,7 @@ export function HomeClient({ workItems }: HomeClientProps) {
   const animateFlip = () => {
     if (!cardRef.current) return;
     isFlipping.current = true;
+    setCardStable(false);
     gsap.to(cardRef.current, {
       rotateY: rotationState.current.base + rotationState.current.tiltY,
       duration: 1.1,
@@ -54,6 +63,7 @@ export function HomeClient({ workItems }: HomeClientProps) {
       overwrite: 'auto',
       onComplete: () => {
         isFlipping.current = false;
+        setCardStable(true);
       },
     });
   };
@@ -95,10 +105,10 @@ export function HomeClient({ workItems }: HomeClientProps) {
     });
   };
 
-  const openPanel = (panel: Panel) => (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const animateOpenPanel = (panel: Panel) => {
     if (!cardContainerRef.current || !cardRef.current) return;
 
+    setCardStable(false);
     timelineRef.current?.kill();
     const tl = gsap.timeline({ onComplete: () => setActivePanel(panel) });
     timelineRef.current = tl;
@@ -120,13 +130,13 @@ export function HomeClient({ workItems }: HomeClientProps) {
     );
   };
 
-  const handleClosePanel = () => {
+  const animateClosePanel = () => {
     if (!cardContainerRef.current || !cardRef.current) return;
 
     setActivePanel(null);
 
     timelineRef.current?.kill();
-    const tl = gsap.timeline();
+    const tl = gsap.timeline({ onComplete: () => setCardStable(true) });
     timelineRef.current = tl;
 
     tl.to(cardContainerRef.current, {
@@ -144,6 +154,30 @@ export function HomeClient({ workItems }: HomeClientProps) {
     );
   };
 
+  const openPanel = (panel: Panel) => (e: React.MouseEvent) => {
+    e.stopPropagation();
+    history.pushState({ panel }, '', `/${panel}`);
+    animateOpenPanel(panel);
+  };
+
+  const handleClosePanel = () => {
+    history.back();
+  };
+
+  useEffect(() => {
+    const onPopState = (e: PopStateEvent) => {
+      const panel = (e.state?.panel as Panel) ?? null;
+      if (panel) {
+        animateOpenPanel(panel);
+      } else {
+        animateClosePanel();
+      }
+    };
+
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
+  });
+
   const handleCardToggle = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!canFlipCard || isFlipping.current) return;
     const bounds = e.currentTarget.getBoundingClientRect();
@@ -151,6 +185,10 @@ export function HomeClient({ workItems }: HomeClientProps) {
     const direction = x < 0.5 ? -1 : 1;
     rotationState.current.base += 180 * direction;
     setIsFlipped((f) => !f);
+    if (showHint) {
+      setShowHint(false);
+      localStorage.setItem('hasFlipped', '1');
+    }
     animateFlip();
   };
 
@@ -182,7 +220,9 @@ export function HomeClient({ workItems }: HomeClientProps) {
         onContactClick={openPanel('contact')}
         onThoughtsClick={openPanel('thoughts')}
       />
-      <p className='text-xs uppercase tracking-wide text-neutral-400 dark:text-neutral-600'>
+      <p className={`text-xs uppercase tracking-wide text-neutral-400 dark:text-neutral-600 transition-opacity duration-300 ${
+        showHint && cardStable ? 'opacity-100' : 'opacity-0'
+      }`}>
         tap to flip
       </p>
       <Thoughts isOpen={activePanel === 'thoughts'} content={noteContent} onClose={handleClosePanel} />
