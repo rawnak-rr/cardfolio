@@ -97,22 +97,24 @@ export function Card({
           <div className='card-face card-back'>
             <div className='relative z-10 flex h-full flex-col justify-end'>
               <div className='space-y-2 text-left'>
-                <div className='space-y-0.5'>
-                  <h2 className={headingClass}>
-                    LEIBNIZ EDUCATION
-                  </h2>
-                  <p className={labelClass}>
-                    SOFTWARE ENGINEER
-                  </p>
-                </div>
                 <div className='flex justify-between items-end'>
-                  <div className='space-y-0.5'>
-                    <h2 className={headingClass}>
-                      TURFINDER
-                    </h2>
-                    <p className={labelClass}>
-                      FOUNDER
-                    </p>
+                  <div className='space-y-2 pointer-events-none select-none'>
+                    <div className='space-y-0.5'>
+                      <h2 className={headingClass}>
+                        LEIBNIZ EDUCATION
+                      </h2>
+                      <p className={labelClass}>
+                        SOFTWARE ENGINEER
+                      </p>
+                    </div>
+                    <div className='space-y-0.5'>
+                      <h2 className={headingClass}>
+                        TURFINDER
+                      </h2>
+                      <p className={labelClass}>
+                        FOUNDER
+                      </p>
+                    </div>
                   </div>
                   <div className='flex flex-col items-end space-y-0.5'>
                     <button type='button' className={linkClass} onClick={onThoughtsClick}>

@@ -23,6 +23,7 @@ export function HomeClient({ workItems }: HomeClientProps) {
   const cardContainerRef = useRef<HTMLDivElement>(null);
   const rotationState = useRef({ base: 0, tiltX: 0, tiltY: 0 });
   const isMousePointer = useRef(false);
+  const isFlipping = useRef(false);
   const timelineRef = useRef<gsap.core.Timeline | null>(null);
 
   const currentStudy = studies.find((s) => s.current) ?? studies[0];
@@ -45,11 +46,15 @@ export function HomeClient({ workItems }: HomeClientProps) {
 
   const animateFlip = () => {
     if (!cardRef.current) return;
+    isFlipping.current = true;
     gsap.to(cardRef.current, {
       rotateY: rotationState.current.base + rotationState.current.tiltY,
       duration: 1.1,
       ease: 'power4.inOut',
       overwrite: 'auto',
+      onComplete: () => {
+        isFlipping.current = false;
+      },
     });
   };
 
@@ -58,7 +63,7 @@ export function HomeClient({ workItems }: HomeClientProps) {
   };
 
   const handlePointerMove = (e: React.PointerEvent) => {
-    if (!isMousePointer.current || !cardRef.current) return;
+    if (!isMousePointer.current || !cardRef.current || isFlipping.current) return;
     const bounds = e.currentTarget.getBoundingClientRect();
     const x = (e.clientX - bounds.left) / bounds.width;
     const y = (e.clientY - bounds.top) / bounds.height;
@@ -139,7 +144,7 @@ export function HomeClient({ workItems }: HomeClientProps) {
   };
 
   const handleCardToggle = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!canFlipCard) return;
+    if (!canFlipCard || isFlipping.current) return;
     const bounds = e.currentTarget.getBoundingClientRect();
     const x = (e.clientX - bounds.left) / bounds.width;
     const direction = x < 0.5 ? -1 : 1;
@@ -151,7 +156,7 @@ export function HomeClient({ workItems }: HomeClientProps) {
   const handleCardKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key !== 'Enter' && e.key !== ' ') return;
     e.preventDefault();
-    if (!canFlipCard) return;
+    if (!canFlipCard || isFlipping.current) return;
     rotationState.current.base += 180;
     setIsFlipped((f) => !f);
     animateFlip();
