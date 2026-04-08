@@ -15,7 +15,7 @@ export function Work({ isOpen, items, onClose }: WorkProps) {
 
   return (
     <div
-      className={`work-panel fixed inset-0 flex items-center justify-center bg-[#050505] text-white transition-opacity duration-300 ${
+      className={`z-50 fixed inset-0 flex items-center justify-center bg-[#050505] text-white transition-opacity duration-300 ${
         isOpen
           ? 'opacity-100 pointer-events-auto'
           : 'opacity-0 pointer-events-none'

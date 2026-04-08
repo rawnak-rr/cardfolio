@@ -11,7 +11,7 @@ type ThoughtsProps = {
 export function Thoughts({ isOpen, content, onClose }: ThoughtsProps) {
   return (
     <div
-      className={`note-panel fixed inset-0 bg-black text-white font-mono transition-opacity duration-300 flex items-center justify-center ${
+      className={`z-50 fixed inset-0 bg-black text-white font-mono transition-opacity duration-300 flex items-center justify-center ${
         isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
       }`}
     >

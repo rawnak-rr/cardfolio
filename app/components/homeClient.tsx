@@ -10,34 +10,36 @@ import { profile, studies } from '@/src/data';
 import { noteContent } from '@/src/noteContent';
 import type { WorkItem } from '@/src/work';
 
+type Panel = 'thoughts' | 'contact' | 'work' | null;
+
 type HomeClientProps = {
   workItems: WorkItem[];
 };
 
 export function HomeClient({ workItems }: HomeClientProps) {
   const [isFlipped, setIsFlipped] = useState(false);
-  const [showThoughts, setShowThoughts] = useState(false);
-  const [showContact, setShowContact] = useState(false);
-  const [showWork, setShowWork] = useState(false);
-  const [emailCopied, setEmailCopied] = useState(false);
+  const [activePanel, setActivePanel] = useState<Panel>(null);
   const cardRef = useRef<HTMLDivElement>(null);
   const cardContainerRef = useRef<HTMLDivElement>(null);
   const rotationState = useRef({ base: 0, tiltX: 0, tiltY: 0 });
   const isMousePointer = useRef(false);
+  const timelineRef = useRef<gsap.core.Timeline | null>(null);
 
   const currentStudy = studies.find((s) => s.current) ?? studies[0];
-  const canFlipCard = !showThoughts && !showContact && !showWork;
+  const canFlipCard = activePanel === null;
 
   useEffect(() => {
-    if (!cardRef.current) return;
-    gsap.set(cardRef.current, {
+    const el = cardRef.current;
+    if (!el) return;
+    gsap.set(el, {
       rotateX: 0,
       rotateY: 0,
       transformPerspective: 1600,
       transformOrigin: '50% 50%',
     });
     return () => {
-      if (cardRef.current) gsap.killTweensOf(cardRef.current);
+      gsap.killTweensOf(el);
+      timelineRef.current?.kill();
     };
   }, []);
 
@@ -87,10 +89,13 @@ export function HomeClient({ workItems }: HomeClientProps) {
     });
   };
 
-  const openPanel = (onComplete: () => void) => {
+  const openPanel = (panel: Panel) => (e: React.MouseEvent) => {
+    e.stopPropagation();
     if (!cardContainerRef.current || !cardRef.current) return;
 
-    const tl = gsap.timeline({ onComplete });
+    timelineRef.current?.kill();
+    const tl = gsap.timeline({ onComplete: () => setActivePanel(panel) });
+    timelineRef.current = tl;
 
     tl.to(cardRef.current, {
       rotateX: 0,
@@ -109,29 +114,14 @@ export function HomeClient({ workItems }: HomeClientProps) {
     );
   };
 
-  const handleWorkClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    openPanel(() => setShowWork(true));
-  };
-
-  const handleThoughtsClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    openPanel(() => setShowThoughts(true));
-  };
-
-  const handleContactClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    openPanel(() => setShowContact(true));
-  };
-
   const handleClosePanel = () => {
     if (!cardContainerRef.current || !cardRef.current) return;
 
-    setShowThoughts(false);
-    setShowContact(false);
-    setShowWork(false);
+    setActivePanel(null);
 
+    timelineRef.current?.kill();
     const tl = gsap.timeline();
+    timelineRef.current = tl;
 
     tl.to(cardContainerRef.current, {
       y: '0%',
@@ -182,22 +172,13 @@ export function HomeClient({ workItems }: HomeClientProps) {
         onPointerEnter={handlePointerEnter}
         onPointerMove={handlePointerMove}
         onPointerLeave={handlePointerLeave}
-        onWorkClick={handleWorkClick}
-        onContactClick={handleContactClick}
-        onThoughtsClick={handleThoughtsClick}
+        onWorkClick={openPanel('work')}
+        onContactClick={openPanel('contact')}
+        onThoughtsClick={openPanel('thoughts')}
       />
-      <Thoughts isOpen={showThoughts} content={noteContent} onClose={handleClosePanel} />
-      <Contact
-        isOpen={showContact}
-        emailCopied={emailCopied}
-        onCopyEmail={() => {
-          navigator.clipboard.writeText('rawnakd11@gmail.com');
-          setEmailCopied(true);
-          setTimeout(() => setEmailCopied(false), 2000);
-        }}
-        onClose={handleClosePanel}
-      />
-      <Work isOpen={showWork} items={workItems} onClose={handleClosePanel} />
+      <Thoughts isOpen={activePanel === 'thoughts'} content={noteContent} onClose={handleClosePanel} />
+      <Contact isOpen={activePanel === 'contact'} onClose={handleClosePanel} />
+      <Work isOpen={activePanel === 'work'} items={workItems} onClose={handleClosePanel} />
     </main>
   );
 }
