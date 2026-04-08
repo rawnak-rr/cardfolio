@@ -164,7 +164,7 @@ export function HomeClient({ workItems }: HomeClientProps) {
   };
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center font-mono gap-6 px-6 py-12 overflow-hidden">
+    <main className="min-h-screen flex flex-col items-center justify-center gap-6 px-6 py-12 overflow-hidden">
       <Card
         cardRef={cardRef}
         cardContainerRef={cardContainerRef}

@@ -4,6 +4,14 @@
   --font-mono: var(--font-space-mono), 'Space Mono', monospace;
 }
 
+body,
+button,
+input,
+select,
+textarea {
+  font-family: var(--font-mono);
+}
+
 .card-button {
   position: relative;
   display: block;

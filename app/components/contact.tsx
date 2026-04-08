@@ -35,7 +35,7 @@ export function Contact({ isOpen, onClose }: ContactProps) {
         <div className="space-y-4 text-sm tracking-wide">
           <button
             type="button"
-            className="block text-white/80 hover:text-white transition-colors bg-transparent border-0 cursor-pointer p-0 text-sm tracking-wide font-[inherit]"
+            className="block text-white/80 hover:text-white transition-colors bg-transparent border-0 cursor-pointer p-0 text-sm tracking-wide"
             onClick={handleCopyEmail}
           >
             {emailCopied ? 'copied!' : 'rawnakd11@gmail.com'}

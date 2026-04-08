@@ -11,12 +11,15 @@ type ThoughtsProps = {
 export function Thoughts({ isOpen, content, onClose }: ThoughtsProps) {
   return (
     <div
-      className={`z-50 fixed inset-0 bg-black text-white font-mono transition-opacity duration-300 flex items-center justify-center ${
-        isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-      }`}
-    >
-      <div className="max-w-md px-6 flex flex-col gap-8">
-        <p className="text-sm leading-relaxed tracking-wide">{content}</p>
+      className={`z-50 fixed inset-0 bg-black text-white transition-opacity duration-300 flex items-center justify-center ${
+        isOpen
+          ? 'opacity-100 pointer-events-auto'
+          : 'opacity-0 pointer-events-none'
+      }`}>
+      <div className='max-w-md px-6 flex flex-col gap-8'>
+        <p className='text-sm uppercase leading-relaxed tracking-wide'>
+          {content}
+        </p>
         <BackButton onClick={onClose} />
       </div>
     </div>
