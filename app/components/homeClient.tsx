@@ -8,7 +8,7 @@ import { Thoughts } from '@/app/components/thoughts';
 import { Work } from '@/app/components/work';
 import { profile, studies } from '@/src/data';
 import { noteContent } from '@/src/noteContent';
-import type { WorkItem } from '@/src/work';
+import type { WorkItem } from '@/src/data';
 
 type Panel = 'thoughts' | 'contact' | 'work' | null;
 
@@ -81,8 +81,9 @@ export function HomeClient({ workItems }: HomeClientProps) {
   };
 
   const handlePointerLeave = () => {
+    const wasMouse = isMousePointer.current;
     isMousePointer.current = false;
-    if (!cardRef.current) return;
+    if (!wasMouse || !cardRef.current || isFlipping.current) return;
     rotationState.current.tiltX = 0;
     rotationState.current.tiltY = 0;
     gsap.to(cardRef.current, {

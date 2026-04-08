@@ -1,6 +1,6 @@
 import { HomeClient } from '@/app/components/homeClient';
-import { getWorkItems } from '@/src/work';
+import { workItems } from '@/src/data';
 
 export default function Page() {
-  return <HomeClient workItems={getWorkItems()} />;
+  return <HomeClient workItems={workItems} />;
 }

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { BackButton } from '@/app/components/backButton';
-import type { WorkItem } from '@/src/work';
+import type { WorkItem } from '@/src/data';
 
 type WorkProps = {
   isOpen: boolean;
