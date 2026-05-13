@@ -10,6 +10,9 @@ const spaceMono = Space_Mono({
 
 export const metadata: Metadata = {
   title: 'rawnak',
+  icons: {
+    icon: '/favicon.ico',
+  },
 };
 
 export default function RootLayout({
