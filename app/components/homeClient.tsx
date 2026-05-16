@@ -14,11 +14,12 @@ type Panel = 'thoughts' | 'contact' | 'work' | null;
 
 type HomeClientProps = {
   workItems: WorkItem[];
+  initialPanel?: Panel;
 };
 
-export function HomeClient({ workItems }: HomeClientProps) {
+export function HomeClient({ workItems, initialPanel = null }: HomeClientProps) {
   const [isFlipped, setIsFlipped] = useState(false);
-  const [activePanel, setActivePanel] = useState<Panel>(null);
+  const [activePanel, setActivePanel] = useState<Panel>(initialPanel);
   const [cardStable, setCardStable] = useState(true);
   const [showHint, setShowHint] = useState(false);
 
