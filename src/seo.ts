@@ -16,7 +16,7 @@ export const siteUrl = normalizeSiteUrl(
 export const siteName = "rawnak";
 
 export const siteDescription =
-  "rawnak is a Sydney-based fullstack developer and UNSW Computer Science student building telemetry, education, and sports technology products.";
+  "rawnak is a Sydney-based fullstack developer and UNSW Computer Science student building telemetry, edtech/education and matchmaking software";
 
 export const seoKeywords = [
   "rawnak",
@@ -34,7 +34,7 @@ export const seoKeywords = [
 export const routeMetadata = {
   home: {
     path: "/",
-    title: "rawnak | Fullstack Developer",
+    title: "rawnak",
     description: siteDescription,
   },
   work: {
