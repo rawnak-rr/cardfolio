@@ -6,18 +6,18 @@ import { Card } from '@/app/components/card';
 import { Contact } from '@/app/components/contact';
 import { Thoughts } from '@/app/components/thoughts';
 import { Work } from '@/app/components/work';
-import { profile, studies } from '@/src/data';
-import { noteContent } from '@/src/noteContent';
-import type { WorkItem } from '@/src/data';
+import { profile, studies } from '@/lib/data';
+import { noteContent } from '@/lib/noteContent';
+import type { WorkItem } from '@/lib/data';
 
 type Panel = 'thoughts' | 'contact' | 'work' | null;
 
-type HomeClientProps = {
+type CardFolioProps = {
   workItems: WorkItem[];
   initialPanel?: Panel;
 };
 
-export function HomeClient({ workItems, initialPanel = null }: HomeClientProps) {
+export function CardFolio({ workItems, initialPanel = null }: CardFolioProps) {
   const [isFlipped, setIsFlipped] = useState(false);
   const [activePanel, setActivePanel] = useState<Panel>(initialPanel);
   const [cardStable, setCardStable] = useState(true);

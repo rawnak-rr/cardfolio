@@ -7,7 +7,7 @@ import {
   siteDescription,
   siteName,
   siteUrl,
-} from '@/src/seo';
+} from '@/lib/seo';
 import './globals.css';
 
 const spaceMono = Space_Mono({

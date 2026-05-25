@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { profile, workItems } from "@/src/data";
+import { profile, workItems } from "@/lib/data";
 
 function normalizeSiteUrl(url: string) {
   const withProtocol = /^https?:\/\//.test(url) ? url : `https://${url}`;

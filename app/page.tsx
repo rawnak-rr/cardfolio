@@ -1,6 +1,6 @@
-import { HomeClient } from '@/app/components/homeClient';
-import { workItems } from '@/src/data';
-import { personJsonLd, routeMetadata, websiteJsonLd } from '@/src/seo';
+import { CardFolio } from '@/app/components/cardFolio';
+import { workItems } from '@/lib/data';
+import { personJsonLd, routeMetadata, websiteJsonLd } from '@/lib/seo';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -21,7 +21,7 @@ export default function Page() {
         suppressHydrationWarning
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <HomeClient workItems={workItems} />
+      <CardFolio workItems={workItems} />
     </>
   );
 }

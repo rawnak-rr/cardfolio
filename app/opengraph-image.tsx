@@ -1,5 +1,5 @@
 import { ImageResponse } from 'next/og';
-import { profile } from '@/src/data';
+import { profile } from '@/lib/data';
 
 export const alt = 'rawnak fullstack developer portfolio card';
 export const size = {

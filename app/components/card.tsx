@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import type { KeyboardEvent, PointerEvent, RefObject } from 'react';
+import type { KeyboardEvent, PointerEvent, RefObject } from "react";
 
 const headingClass =
-  'text-base font-bold uppercase tracking-[0.08em] text-black/90';
-const labelClass = 'text-sm uppercase tracking-[0.08em] text-black/50';
+  "text-base font-bold uppercase tracking-[0.08em] text-black/90";
+const labelClass = "text-sm uppercase tracking-[0.08em] text-black/50";
 const linkClass =
-  'dotted-link text-sm uppercase tracking-[0.08em] text-black/50 bg-transparent border-0 cursor-pointer px-1 py-0.5';
+  "dotted-link text-sm uppercase tracking-[0.08em] text-black/50 bg-transparent border-0 cursor-pointer px-1 py-0.5";
 
 type CardProps = {
   cardRef: RefObject<HTMLDivElement | null>;
@@ -56,7 +56,7 @@ export function Card({
         onPointerLeave={onPointerLeave}
         onClick={onCardToggle}
         onKeyDown={onCardKeyDown}
-        aria-label={isFlipped ? 'Show front of card' : 'Show back of card'}
+        aria-label={isFlipped ? "Show front of card" : "Show back of card"}
         aria-disabled={!canFlipCard}>
         <div
           ref={cardRef}
@@ -67,14 +67,14 @@ export function Card({
               <div className='space-y-0.5 text-left'>
                 <h1 className={headingClass}>{profileName}</h1>
                 <p className={labelClass}>
-                  {profileRole.split(' ').map((word, i) => (
+                  {profileRole.split(" ").map((word, i) => (
                     <span key={i}>
-                      {i > 0 && ' '}
+                      {i > 0 && " "}
                       <span
                         className={
-                          ['fullstack', 'unsw'].includes(word.toLowerCase())
-                            ? 'font-bold text-black/90'
-                            : ''
+                          ["fullstack", "unsw"].includes(word.toLowerCase())
+                            ? "font-bold text-black/90"
+                            : ""
                         }>
                         {word.toUpperCase()}
                       </span>
@@ -121,7 +121,7 @@ export function Card({
                     </div>
                     <div className='space-y-0.5'>
                       <h2 className={headingClass}>TURFINDER</h2>
-                      <p className={labelClass}>FOUNDER</p>
+                      <p className={labelClass}>FOUNDER && SWE</p>
                     </div>
                   </div>
                   <div className='flex flex-col items-end space-y-0.5'>

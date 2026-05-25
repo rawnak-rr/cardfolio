@@ -1,6 +1,6 @@
-import { HomeClient } from '@/app/components/homeClient';
-import { workItems } from '@/src/data';
-import { routeMetadata } from '@/src/seo';
+import { CardFolio } from '@/app/components/cardFolio';
+import { workItems } from '@/lib/data';
+import { routeMetadata } from '@/lib/seo';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -21,5 +21,5 @@ export const metadata: Metadata = {
 };
 
 export default function ThoughtsPage() {
-  return <HomeClient workItems={workItems} initialPanel="thoughts" />;
+  return <CardFolio workItems={workItems} initialPanel="thoughts" />;
 }
