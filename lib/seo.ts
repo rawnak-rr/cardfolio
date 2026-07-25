@@ -49,12 +49,6 @@ export const routeMetadata = {
     description:
       "Contact rawnak for software engineering, product, and collaboration opportunities.",
   },
-  thoughts: {
-    path: "/thoughts",
-    title: "Thoughts | rawnak",
-    description:
-      "Notes and thoughts from rawnak on building software, products, and systems.",
-  },
 } as const;
 
 export const socialLinks = [

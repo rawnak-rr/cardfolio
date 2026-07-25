@@ -4,13 +4,11 @@ import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { Card } from '@/app/components/card';
 import { Contact } from '@/app/components/contact';
-import { Thoughts } from '@/app/components/thoughts';
 import { Work } from '@/app/components/work';
 import { profile, studies } from '@/lib/data';
-import { noteContent } from '@/lib/noteContent';
 import type { WorkItem } from '@/lib/data';
 
-type Panel = 'thoughts' | 'contact' | 'work' | null;
+type Panel = 'contact' | 'work' | null;
 
 type CardFolioProps = {
   workItems: WorkItem[];
@@ -264,7 +262,6 @@ export function CardFolio({ workItems, initialPanel = null }: CardFolioProps) {
       }`}>
         tap to flip
       </p>
-      <Thoughts isOpen={activePanel === 'thoughts'} content={noteContent} onClose={handleClosePanel} />
       <Contact isOpen={activePanel === 'contact'} onClose={handleClosePanel} />
       <Work isOpen={activePanel === 'work'} items={workItems} onClose={handleClosePanel} />
     </main>
