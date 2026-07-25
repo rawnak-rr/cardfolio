@@ -161,6 +161,44 @@ export function CardFolio({ workItems, initialPanel = null }: CardFolioProps) {
     animateOpenPanel(panel);
   };
 
+  const handleThoughtsClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.stopPropagation();
+
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+
+    e.preventDefault();
+
+    if (!cardContainerRef.current || !cardRef.current) {
+      window.location.assign(e.currentTarget.href);
+      return;
+    }
+
+    const destination = e.currentTarget.href;
+    setCardStable(false);
+    timelineRef.current?.kill();
+
+    const tl = gsap.timeline({
+      onComplete: () => window.location.assign(destination),
+    });
+    timelineRef.current = tl;
+
+    tl.to(cardRef.current, {
+      rotateX: 0,
+      rotateY: rotationState.current.base,
+      rotateZ: 90,
+      duration: 0.6,
+      ease: 'power3.inOut',
+    }).to(
+      cardContainerRef.current,
+      {
+        y: '-250%',
+        duration: 0.6,
+        ease: 'power2.in',
+      },
+      '-=0.1',
+    );
+  };
+
   const handleClosePanel = () => {
     history.back();
   };
@@ -219,7 +257,7 @@ export function CardFolio({ workItems, initialPanel = null }: CardFolioProps) {
         onPointerLeave={handlePointerLeave}
         onWorkClick={openPanel('work')}
         onContactClick={openPanel('contact')}
-        onThoughtsClick={openPanel('thoughts')}
+        onThoughtsClick={handleThoughtsClick}
       />
       <p className={`text-xs uppercase tracking-wide text-neutral-400 dark:text-neutral-600 transition-opacity duration-300 ${
         showHint && cardStable ? 'opacity-100' : 'opacity-0'

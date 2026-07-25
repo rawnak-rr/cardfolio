@@ -23,7 +23,7 @@ type CardProps = {
   onPointerLeave: () => void;
   onWorkClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
   onContactClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
-  onThoughtsClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onThoughtsClick: (e: React.MouseEvent<HTMLAnchorElement>) => void;
 };
 
 export function Card({
@@ -125,12 +125,12 @@ export function Card({
                     </div>
                   </div>
                   <div className='flex flex-col items-end space-y-0.5'>
-                    <button
-                      type='button'
+                    <a
+                      href='https://thoughts.rawnakk.me'
                       className={linkClass}
                       onClick={onThoughtsClick}>
                       THOUGHTS
-                    </button>
+                    </a>
                     <a
                       href='https://github.com/rawnak-rr'
                       target='_blank'
