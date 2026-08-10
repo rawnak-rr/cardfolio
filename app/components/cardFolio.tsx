@@ -51,6 +51,31 @@ export function CardFolio({ workItems, initialPanel = null }: CardFolioProps) {
     };
   }, []);
 
+  // A back-navigation from the external thoughts site can restore this page from
+  // bfcache with the exit animation's inline transforms still applied, leaving the
+  // card parked off-screen. Put it back where it belongs whenever the page is shown.
+  useEffect(() => {
+    const onPageShow = () => {
+      if (activePanel !== null) return;
+      timelineRef.current?.kill();
+      isFlipping.current = false;
+      if (cardContainerRef.current) {
+        gsap.set(cardContainerRef.current, { y: '0%' });
+      }
+      if (cardRef.current) {
+        gsap.set(cardRef.current, {
+          rotateX: 0,
+          rotateY: rotationState.current.base,
+          rotateZ: 0,
+        });
+      }
+      setCardStable(true);
+    };
+
+    window.addEventListener('pageshow', onPageShow);
+    return () => window.removeEventListener('pageshow', onPageShow);
+  }, [activePanel]);
+
   const animateFlip = () => {
     if (!cardRef.current) return;
     isFlipping.current = true;
