@@ -1,31 +1,23 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { Card } from '@/app/components/card';
 import { Contact } from '@/app/components/contact';
 import { Work } from '@/app/components/work';
-import { profile, studies } from '@/lib/data';
-import type { WorkItem } from '@/lib/data';
 
 type Panel = 'contact' | 'work' | null;
 
 type CardFolioProps = {
-  workItems: WorkItem[];
   initialPanel?: Panel;
 };
 
-export function CardFolio({ workItems, initialPanel = null }: CardFolioProps) {
+export function CardFolio({ initialPanel = null }: CardFolioProps) {
   const [isFlipped, setIsFlipped] = useState(false);
   const [activePanel, setActivePanel] = useState<Panel>(initialPanel);
   const [cardStable, setCardStable] = useState(true);
   const [showHint, setShowHint] = useState(false);
 
-  useEffect(() => {
-    if (!localStorage.getItem('hasFlipped')) {
-      setShowHint(true);
-    }
-  }, []);
   const cardRef = useRef<HTMLDivElement>(null);
   const cardContainerRef = useRef<HTMLDivElement>(null);
   const rotationState = useRef({ base: 0, tiltX: 0, tiltY: 0 });
@@ -33,8 +25,13 @@ export function CardFolio({ workItems, initialPanel = null }: CardFolioProps) {
   const isFlipping = useRef(false);
   const timelineRef = useRef<gsap.core.Timeline | null>(null);
 
-  const currentStudy = studies.find((s) => s.current) ?? studies[0];
   const canFlipCard = activePanel === null;
+
+  useEffect(() => {
+    if (!localStorage.getItem('hasFlipped')) {
+      setShowHint(true);
+    }
+  }, []);
 
   useEffect(() => {
     const el = cardRef.current;
@@ -129,22 +126,29 @@ export function CardFolio({ workItems, initialPanel = null }: CardFolioProps) {
     });
   };
 
-  const animateOpenPanel = (panel: Panel) => {
-    if (!cardContainerRef.current || !cardRef.current) return;
+  /**
+   * Spins the card upright then flings it off the top of the screen. Used both when
+   * opening a panel and when leaving for the external thoughts site. Returns false
+   * when the card isn't mounted yet, so callers can fall back to no animation.
+   */
+  const animateCardExit = useCallback((onComplete: () => void) => {
+    const container = cardContainerRef.current;
+    const card = cardRef.current;
+    if (!container || !card) return false;
 
     setCardStable(false);
     timelineRef.current?.kill();
-    const tl = gsap.timeline({ onComplete: () => setActivePanel(panel) });
+    const tl = gsap.timeline({ onComplete });
     timelineRef.current = tl;
 
-    tl.to(cardRef.current, {
+    tl.to(card, {
       rotateX: 0,
       rotateY: rotationState.current.base,
       rotateZ: 90,
       duration: 0.6,
       ease: 'power3.inOut',
     }).to(
-      cardContainerRef.current,
+      container,
       {
         y: '-250%',
         duration: 0.6,
@@ -152,10 +156,21 @@ export function CardFolio({ workItems, initialPanel = null }: CardFolioProps) {
       },
       '-=0.1',
     );
-  };
 
-  const animateClosePanel = () => {
-    if (!cardContainerRef.current || !cardRef.current) return;
+    return true;
+  }, []);
+
+  const animateOpenPanel = useCallback(
+    (panel: Panel) => {
+      animateCardExit(() => setActivePanel(panel));
+    },
+    [animateCardExit],
+  );
+
+  const animateClosePanel = useCallback(() => {
+    const container = cardContainerRef.current;
+    const card = cardRef.current;
+    if (!container || !card) return;
 
     setActivePanel(null);
 
@@ -163,12 +178,12 @@ export function CardFolio({ workItems, initialPanel = null }: CardFolioProps) {
     const tl = gsap.timeline({ onComplete: () => setCardStable(true) });
     timelineRef.current = tl;
 
-    tl.to(cardContainerRef.current, {
+    tl.to(container, {
       y: '0%',
       duration: 0.6,
       ease: 'power2.out',
     }).to(
-      cardRef.current,
+      card,
       {
         rotateZ: 0,
         duration: 0.6,
@@ -176,7 +191,21 @@ export function CardFolio({ workItems, initialPanel = null }: CardFolioProps) {
       },
       '-=0.1',
     );
-  };
+  }, []);
+
+  useEffect(() => {
+    const onPopState = (e: PopStateEvent) => {
+      const panel = (e.state?.panel as Panel) ?? null;
+      if (panel) {
+        animateOpenPanel(panel);
+      } else {
+        animateClosePanel();
+      }
+    };
+
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
+  }, [animateOpenPanel, animateClosePanel]);
 
   const openPanel = (panel: Panel) => (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -191,60 +220,18 @@ export function CardFolio({ workItems, initialPanel = null }: CardFolioProps) {
 
     e.preventDefault();
 
-    if (!cardContainerRef.current || !cardRef.current) {
-      window.location.assign(e.currentTarget.href);
-      return;
-    }
-
     const destination = e.currentTarget.href;
-    setCardStable(false);
-    timelineRef.current?.kill();
-
-    const tl = gsap.timeline({
-      onComplete: () => window.location.assign(destination),
-    });
-    timelineRef.current = tl;
-
-    tl.to(cardRef.current, {
-      rotateX: 0,
-      rotateY: rotationState.current.base,
-      rotateZ: 90,
-      duration: 0.6,
-      ease: 'power3.inOut',
-    }).to(
-      cardContainerRef.current,
-      {
-        y: '-250%',
-        duration: 0.6,
-        ease: 'power2.in',
-      },
-      '-=0.1',
-    );
+    if (!animateCardExit(() => window.location.assign(destination))) {
+      window.location.assign(destination);
+    }
   };
 
   const handleClosePanel = () => {
     history.back();
   };
 
-  useEffect(() => {
-    const onPopState = (e: PopStateEvent) => {
-      const panel = (e.state?.panel as Panel) ?? null;
-      if (panel) {
-        animateOpenPanel(panel);
-      } else {
-        animateClosePanel();
-      }
-    };
-
-    window.addEventListener('popstate', onPopState);
-    return () => window.removeEventListener('popstate', onPopState);
-  });
-
-  const handleCardToggle = (e: React.MouseEvent<HTMLDivElement>) => {
+  const flipCard = (direction: 1 | -1) => {
     if (!canFlipCard || isFlipping.current) return;
-    const bounds = e.currentTarget.getBoundingClientRect();
-    const x = (e.clientX - bounds.left) / bounds.width;
-    const direction = x < 0.5 ? -1 : 1;
     rotationState.current.base += 180 * direction;
     setIsFlipped((f) => !f);
     if (showHint) {
@@ -254,13 +241,16 @@ export function CardFolio({ workItems, initialPanel = null }: CardFolioProps) {
     animateFlip();
   };
 
+  const handleCardToggle = (e: React.MouseEvent<HTMLDivElement>) => {
+    const bounds = e.currentTarget.getBoundingClientRect();
+    const x = (e.clientX - bounds.left) / bounds.width;
+    flipCard(x < 0.5 ? -1 : 1);
+  };
+
   const handleCardKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key !== 'Enter' && e.key !== ' ') return;
     e.preventDefault();
-    if (!canFlipCard || isFlipping.current) return;
-    rotationState.current.base += 180;
-    setIsFlipped((f) => !f);
-    animateFlip();
+    flipCard(1);
   };
 
   return (
@@ -269,9 +259,6 @@ export function CardFolio({ workItems, initialPanel = null }: CardFolioProps) {
         cardRef={cardRef}
         cardContainerRef={cardContainerRef}
         isFlipped={isFlipped}
-        profileName={profile.name}
-        profileRole={profile.role}
-        currentStudyTitle={currentStudy?.title ?? 'UNSW'}
         canFlipCard={canFlipCard}
         onCardToggle={handleCardToggle}
         onCardKeyDown={handleCardKeyDown}
@@ -288,7 +275,7 @@ export function CardFolio({ workItems, initialPanel = null }: CardFolioProps) {
         tap to flip
       </p>
       <Contact isOpen={activePanel === 'contact'} onClose={handleClosePanel} />
-      <Work isOpen={activePanel === 'work'} items={workItems} onClose={handleClosePanel} />
+      <Work isOpen={activePanel === 'work'} onClose={handleClosePanel} />
     </main>
   );
 }

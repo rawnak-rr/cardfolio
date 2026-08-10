@@ -1,38 +1,36 @@
-"use client";
+'use client';
 
-import type { KeyboardEvent, PointerEvent, RefObject } from "react";
+import type { KeyboardEvent, MouseEvent, PointerEvent, RefObject } from 'react';
+import { links, profile, workItems } from '@/lib/data';
 
 const headingClass =
-  "text-base font-bold uppercase tracking-[0.08em] text-black/90";
-const labelClass = "text-sm uppercase tracking-[0.08em] text-black/50";
+  'text-base font-bold uppercase tracking-[0.08em] text-black/90';
+const labelClass = 'text-sm uppercase tracking-[0.08em] text-black/50';
 const linkClass =
-  "dotted-link text-sm uppercase tracking-[0.08em] text-black/50 bg-transparent border-0 cursor-pointer px-1 py-0.5";
+  'dotted-link text-sm uppercase tracking-[0.08em] text-black/50 px-1 py-0.5';
+const buttonLinkClass = `${linkClass} bg-transparent border-0 cursor-pointer`;
+
+const emphasized = new Set(profile.roleEmphasis.map((w) => w.toLowerCase()));
 
 type CardProps = {
   cardRef: RefObject<HTMLDivElement | null>;
   cardContainerRef: RefObject<HTMLDivElement | null>;
   isFlipped: boolean;
-  profileName: string;
-  profileRole: string;
-  currentStudyTitle: string;
   canFlipCard: boolean;
-  onCardToggle: (e: React.MouseEvent<HTMLDivElement>) => void;
+  onCardToggle: (e: MouseEvent<HTMLDivElement>) => void;
   onCardKeyDown: (e: KeyboardEvent<HTMLDivElement>) => void;
   onPointerEnter: (e: PointerEvent<HTMLDivElement>) => void;
   onPointerMove: (e: PointerEvent<HTMLDivElement>) => void;
   onPointerLeave: () => void;
-  onWorkClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
-  onContactClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
-  onThoughtsClick: (e: React.MouseEvent<HTMLAnchorElement>) => void;
+  onWorkClick: (e: MouseEvent<HTMLButtonElement>) => void;
+  onContactClick: (e: MouseEvent<HTMLButtonElement>) => void;
+  onThoughtsClick: (e: MouseEvent<HTMLAnchorElement>) => void;
 };
 
 export function Card({
   cardRef,
   cardContainerRef,
   isFlipped,
-  profileName,
-  profileRole,
-  currentStudyTitle,
   canFlipCard,
   onCardToggle,
   onCardKeyDown,
@@ -56,7 +54,7 @@ export function Card({
         onPointerLeave={onPointerLeave}
         onClick={onCardToggle}
         onKeyDown={onCardKeyDown}
-        aria-label={isFlipped ? "Show front of card" : "Show back of card"}
+        aria-label={isFlipped ? 'Show front of card' : 'Show back of card'}
         aria-disabled={!canFlipCard}>
         <div
           ref={cardRef}
@@ -65,16 +63,16 @@ export function Card({
             <div className='noise-overlay' />
             <div className='flex h-full flex-col justify-end'>
               <div className='space-y-0.5 text-left'>
-                <h1 className={headingClass}>{profileName}</h1>
+                <h1 className={headingClass}>{profile.name}</h1>
                 <p className={labelClass}>
-                  {profileRole.split(" ").map((word, i) => (
+                  {profile.role.split(' ').map((word, i) => (
                     <span key={i}>
-                      {i > 0 && " "}
+                      {i > 0 && ' '}
                       <span
                         className={
-                          ["fullstack", "unsw"].includes(word.toLowerCase())
-                            ? "font-bold text-black/90"
-                            : ""
+                          emphasized.has(word.toLowerCase())
+                            ? 'font-bold text-black/90'
+                            : ''
                         }>
                         {word.toUpperCase()}
                       </span>
@@ -84,20 +82,20 @@ export function Card({
                 <p className={labelClass}>
                   CompSci <span className='font-sans'>@</span>
                   <span className='font-bold text-black/90'>
-                    {currentStudyTitle}
+                    {profile.study}
                   </span>
                 </p>
               </div>
               <div className='absolute bottom-[clamp(1.75rem,4vw,2.5rem)] right-[clamp(1.75rem,4vw,2.5rem)] flex flex-col items-end space-y-0.5'>
                 <button
                   type='button'
-                  className={linkClass}
+                  className={buttonLinkClass}
                   onClick={onWorkClick}>
                   WORK
                 </button>
                 <button
                   type='button'
-                  className={linkClass}
+                  className={buttonLinkClass}
                   onClick={onContactClick}>
                   CONTACT
                 </button>
@@ -111,31 +109,31 @@ export function Card({
               <div className='space-y-2 text-left'>
                 <div className='flex justify-between items-end'>
                   <div className='space-y-2 pointer-events-none select-none'>
-                    <div className='space-y-0.5'>
-                      <h2 className={headingClass}>UNSW REDBACK RACING</h2>
-                      <p className={labelClass}>SOFTWARE ENGINEER, VA</p>
-                    </div>
-                    <div className='space-y-0.5'>
-                      <h2 className={headingClass}>LEIBNIZ EDUCATION</h2>
-                      <p className={labelClass}>SOFTWARE ENGINEER</p>
-                    </div>
-                    <div className='space-y-0.5'>
-                      <h2 className={headingClass}>TURFINDER</h2>
-                      <p className={labelClass}>FOUNDER && SWE</p>
-                    </div>
+                    {workItems.map((item) => (
+                      <div
+                        key={item.company}
+                        className='space-y-0.5'>
+                        <h2 className={headingClass}>
+                          {(item.shortCompany ?? item.company).toUpperCase()}
+                        </h2>
+                        <p className={labelClass}>
+                          {(item.shortRole ?? item.role).toUpperCase()}
+                        </p>
+                      </div>
+                    ))}
                   </div>
                   <div className='flex flex-col items-end space-y-0.5'>
                     <a
-                      href='https://thoughts.rawnakk.me'
+                      href={links.thoughts}
                       className={linkClass}
                       onClick={onThoughtsClick}>
                       THOUGHTS
                     </a>
                     <a
-                      href='https://github.com/rawnak-rr'
+                      href={links.github}
                       target='_blank'
                       rel='noopener noreferrer'
-                      className='dotted-link text-sm uppercase tracking-[0.08em] text-black/50 px-1 py-0.5'
+                      className={linkClass}
                       onClick={(e) => e.stopPropagation()}>
                       GITHUB
                     </a>

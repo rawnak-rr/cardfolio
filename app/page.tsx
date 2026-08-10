@@ -1,15 +1,8 @@
 import { CardFolio } from '@/app/components/cardFolio';
-import { workItems } from '@/lib/data';
-import { personJsonLd, routeMetadata, websiteJsonLd } from '@/lib/seo';
+import { pageMetadata, personJsonLd, websiteJsonLd } from '@/lib/seo';
 import type { Metadata } from 'next';
 
-export const metadata: Metadata = {
-  title: routeMetadata.home.title,
-  description: routeMetadata.home.description,
-  alternates: {
-    canonical: routeMetadata.home.path,
-  },
-};
+export const metadata: Metadata = pageMetadata('home');
 
 export default function Page() {
   const jsonLd = [websiteJsonLd(), personJsonLd()];
@@ -21,7 +14,7 @@ export default function Page() {
         suppressHydrationWarning
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <CardFolio workItems={workItems} />
+      <CardFolio />
     </>
   );
 }
