@@ -28,8 +28,8 @@ export function Work({ isOpen, onClose }: WorkProps) {
                 aria-expanded={isExpanded}
                 onClick={() => setOpenCompany(isExpanded ? '' : item.company)}>
                 <div className='flex items-baseline justify-between gap-4 text-sm'>
-                  <div className='flex items-baseline gap-2 text-white/92'>
-                    <span className='text-xs text-white/42'>
+                  <div className='flex min-w-0 items-baseline gap-2 text-white/92'>
+                    <span className='shrink-0 whitespace-nowrap text-xs text-white/42'>
                       {isExpanded ? '[-]' : '[+]'}
                     </span>
                     <span className='uppercase'>{item.company}</span>

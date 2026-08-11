@@ -45,7 +45,7 @@ export const workItems: WorkItem[] = [
     company: 'turFinder',
     role: 'Founder & Software Engineer',
     shortRole: 'Founder && SWE',
-    date: 'Apr 2025 - Present',
+    date: 'Apr 2025 - Mar 2026',
     summary:
       'i wanted to play pickup soccer but finding games was painful, so i built the thing myself. find games, book fields, get matched with people near you and the whole algorithm improves the more you play. i hope i can make this huge.',
   },

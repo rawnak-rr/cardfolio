@@ -29,7 +29,10 @@ textarea {
   transition: opacity 0.2s ease;
 }
 
-.dotted-link:hover {
+/* `data-pointer-over` is set by the card while the pointer is over a link, because
+   the browser's own :hover resolution is unreliable through the tilted card. */
+.dotted-link:hover,
+.dotted-link[data-pointer-over] {
   opacity: 0.7;
 }
 
