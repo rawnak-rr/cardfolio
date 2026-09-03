@@ -34,7 +34,7 @@ export function Contact({ isOpen, onClose }: ContactProps) {
   };
 
   return (
-    <Panel isOpen={isOpen} onClose={onClose} background='bg-black'>
+    <Panel isOpen={isOpen} onClose={onClose}>
       <div className='flex-1 flex items-center justify-center'>
         <div className='space-y-4 text-sm tracking-wide'>
           <button

@@ -13,7 +13,7 @@ export function Work({ isOpen, onClose }: WorkProps) {
   const [openCompany, setOpenCompany] = useState('');
 
   return (
-    <Panel isOpen={isOpen} onClose={onClose} background='bg-[#050505]'>
+    <Panel isOpen={isOpen} onClose={onClose}>
       <div className='flex-1 space-y-4 overflow-y-auto pr-1'>
         {workItems.map((item) => {
           const isExpanded = item.company === openCompany;
