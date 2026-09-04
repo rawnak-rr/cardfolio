@@ -24,16 +24,16 @@ textarea {
 
 .dotted-link {
   text-decoration: none;
-  border-bottom: 2px dotted currentColor;
+  border-bottom: 2px dotted rgba(0, 0, 0, 0.5);
   padding-bottom: 2px;
-  transition: opacity 0.2s ease;
+  transition: color 0.2s ease;
 }
 
 /* `data-pointer-over` is set by the card while the pointer is over a link, because
    the browser's own :hover resolution is unreliable through the tilted card. */
 .dotted-link:hover,
 .dotted-link[data-pointer-over] {
-  opacity: 0.7;
+  color: #000;
 }
 
 .flip-card {
