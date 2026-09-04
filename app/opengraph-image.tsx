@@ -14,7 +14,7 @@ export default function Image() {
       <div
         style={{
           alignItems: 'center',
-          background: '#f7f3ed',
+          background: '#000000',
           display: 'flex',
           height: '100%',
           justifyContent: 'center',
@@ -22,7 +22,7 @@ export default function Image() {
         }}>
         <div
           style={{
-            background: '#ff6f00',
+            background: '#cc5200',
             border: '2px solid rgba(255, 208, 166, 0.7)',
             borderRadius: 48,
             boxShadow: '0 44px 90px rgba(17, 24, 39, 0.28)',

@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Space_Mono } from 'next/font/google';
 import {
   absoluteUrl,
@@ -13,7 +13,6 @@ import './globals.css';
 const spaceMono = Space_Mono({
   weight: ['400', '700'],
   subsets: ['latin'],
-  variable: '--font-space-mono',
 });
 
 export const metadata: Metadata = {
@@ -70,6 +69,11 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  colorScheme: 'dark',
+  themeColor: '#000000',
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -77,7 +81,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${spaceMono.className} ${spaceMono.variable} bg-white text-neutral-900 dark:bg-neutral-950 dark:text-neutral-100`}>
+      <body className={`${spaceMono.className} bg-black text-neutral-100`}>
         {children}
       </body>
     </html>

@@ -40,10 +40,7 @@ export function Card({
   onThoughtsClick,
 }: CardProps) {
   return (
-    <div
-      ref={cardContainerRef}
-      className="w-[min(90vw,420px)] perspective-[1600px] relative z-10"
-    >
+    <div ref={cardContainerRef} className="w-[min(90vw,420px)] relative z-10">
       <div
         role="button"
         tabIndex={0}
@@ -58,7 +55,6 @@ export function Card({
       >
         <div ref={cardRef} className="flip-card">
           <div className="card-face card-front">
-            <div className="noise-overlay" />
             <div className="flex h-full flex-col justify-end">
               <div className="space-y-0.5 text-left">
                 <h1 className={headingClass}>{profile.name}</h1>
@@ -105,7 +101,6 @@ export function Card({
           </div>
 
           <div className="card-face card-back">
-            <div className="noise-overlay" />
             <div className="relative z-10 flex h-full flex-col justify-end">
               <div className="space-y-2 text-left">
                 <div className="flex justify-between items-end">

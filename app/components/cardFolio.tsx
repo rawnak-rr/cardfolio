@@ -399,7 +399,7 @@ export function CardFolio({ initialPanel = null }: CardFolioProps) {
         onContactClick={openPanel('contact')}
         onThoughtsClick={handleThoughtsClick}
       />
-      <p className={`text-xs uppercase tracking-wide text-neutral-400 dark:text-neutral-600 transition-opacity duration-300 ${
+      <p className={`text-xs uppercase tracking-wide text-neutral-600 transition-opacity duration-300 ${
         showHint && cardStable ? 'opacity-100' : 'opacity-0'
       }`}>
         tap to flip
