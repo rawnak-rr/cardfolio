@@ -6,7 +6,7 @@ import { links, profile } from '@/lib/data';
 
 const socials = [
   { href: links.linkedin, label: 'linkedin.com/in/xdefT' },
-  { href: links.instagram, label: 'instagram.com/dewepto' },
+  { href: links.x, label: 'x.com/xdeflickz' },
 ];
 
 const rowClass = 'block text-white/80 hover:text-white transition-colors';

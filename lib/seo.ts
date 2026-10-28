@@ -87,7 +87,7 @@ export function personJsonLd() {
     url: siteUrl,
     jobTitle: 'Fullstack Developer',
     email: `mailto:${profile.email}`,
-    sameAs: [links.github, links.linkedin, links.instagram],
+    sameAs: [links.github, links.linkedin, links.x],
     affiliation: {
       '@type': 'CollegeOrUniversity',
       name: 'UNSW Sydney',
