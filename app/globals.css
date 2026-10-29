@@ -55,3 +55,144 @@
     inset 0 12px 28px -18px rgba(255, 185, 120, 0.25),
     inset 0 -16px 30px -20px rgba(20, 7, 0, 0.65);
 }
+
+/* --- site (sidebar + pages) ------------------------------------------------ */
+
+@source "../content";
+
+@theme {
+  --color-ink: #e8e6e1;
+  --color-body: rgb(232 230 225 / 78%);
+  --color-muted: #8a877f;
+  --color-rule: #2c2c29;
+  --color-surface: #161615;
+}
+
+/* Layered so Tailwind utilities can still override these per element. */
+@layer components {
+  .article-link {
+    --link-dot: rgb(232 230 225 / 55%);
+
+    padding-bottom: 3px;
+    background-image: radial-gradient(circle, var(--link-dot) 1px, transparent 1.25px);
+    background-position: left bottom;
+    background-repeat: repeat-x;
+    background-size: 6px 2px;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+    transition: color 0.15s ease;
+  }
+
+  .article-link:hover {
+    --link-dot: var(--color-ink);
+    color: var(--color-ink);
+  }
+
+  /* File-tree connectors. Each item draws its own `└─`; every item but the last also
+     carries the vertical line on down to its next sibling, which together reads as `├─`. */
+  .tree {
+    --row-h: 2rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .tree li {
+    position: relative;
+    padding-left: 1.125rem;
+  }
+
+  .tree li::before,
+  .tree li:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    border-left: 1px solid var(--color-rule);
+  }
+
+  .tree li::before {
+    width: 0.75rem;
+    height: calc(var(--row-h) / 2);
+    border-bottom: 1px solid var(--color-rule);
+  }
+
+  .tree li:not(:last-child)::after {
+    bottom: 0;
+  }
+
+  .tree-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    height: var(--row-h);
+    padding: 0 0.375rem;
+    border: 0;
+    background: none;
+    color: var(--color-muted);
+    font: inherit;
+    text-align: left;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: color 0.12s ease, background-color 0.12s ease;
+  }
+
+  .tree-row:hover {
+    color: var(--color-ink);
+  }
+
+  /* Placeholder until the selected-row reference comes through. */
+  .tree-row[aria-current='page'] {
+    color: var(--color-ink);
+    background: var(--color-surface);
+  }
+
+  .tree-row:focus-visible {
+    outline: 1px solid var(--color-muted);
+    outline-offset: -1px;
+  }
+
+  .tree-label {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .tree-chevron {
+    color: var(--color-muted);
+    transition: transform 0.18s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  [aria-expanded='false'] > .tree-chevron {
+    transform: rotate(-90deg);
+  }
+
+  /* Animating grid rows from 1fr to 0fr collapses to the content's real height, with
+     no measuring in JS. */
+  .tree-children {
+    display: grid;
+    grid-template-rows: 1fr;
+    opacity: 1;
+    transition:
+      grid-template-rows 0.2s cubic-bezier(0.2, 0.8, 0.2, 1),
+      opacity 0.16s ease;
+  }
+
+  .tree-children[data-collapsed='true'] {
+    grid-template-rows: 0fr;
+    opacity: 0;
+  }
+
+  .tree-children > ul {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tree-children,
+    .tree-chevron {
+      transition: none;
+    }
+  }
+}

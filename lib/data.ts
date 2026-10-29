@@ -11,7 +11,7 @@ export const links = {
   github: 'https://github.com/rawnak-rr',
   linkedin: 'https://www.linkedin.com/in/xdef',
   x: 'https://x.com/xdeflickz',
-  thoughts: 'https://thoughts.rawnakk.me',
+  thoughts: '/thoughts',
 };
 
 export type WorkItem = {

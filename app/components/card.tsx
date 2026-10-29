@@ -6,7 +6,6 @@ import { links, profile, workItems } from "@/lib/data";
 const headingClass = "text-base font-bold uppercase text-black";
 const labelClass = "text-sm uppercase text-black/50";
 const linkClass = "dotted-link text-sm uppercase  text-black/50 px-1 py-0.5";
-const buttonLinkClass = `${linkClass} border-0 cursor-pointer`;
 
 const emphasized = new Set(profile.roleEmphasis.map((w) => w.toLowerCase()));
 
@@ -14,30 +13,25 @@ type CardProps = {
   cardRef: RefObject<HTMLDivElement | null>;
   cardContainerRef: RefObject<HTMLDivElement | null>;
   isFlipped: boolean;
-  canFlipCard: boolean;
   onCardToggle: (e: MouseEvent<HTMLDivElement>) => void;
   onCardKeyDown: (e: KeyboardEvent<HTMLDivElement>) => void;
   onPointerEnter: (e: PointerEvent<HTMLDivElement>) => void;
   onPointerMove: (e: PointerEvent<HTMLDivElement>) => void;
   onPointerLeave: () => void;
-  onWorkClick: (e: MouseEvent<HTMLButtonElement>) => void;
-  onContactClick: (e: MouseEvent<HTMLButtonElement>) => void;
-  onThoughtsClick: (e: MouseEvent<HTMLAnchorElement>) => void;
+  /** WORK, CONTACT and THOUGHTS: plays the card's exit before navigating. */
+  onLeaveClick: (e: MouseEvent<HTMLAnchorElement>) => void;
 };
 
 export function Card({
   cardRef,
   cardContainerRef,
   isFlipped,
-  canFlipCard,
   onCardToggle,
   onCardKeyDown,
   onPointerEnter,
   onPointerMove,
   onPointerLeave,
-  onWorkClick,
-  onContactClick,
-  onThoughtsClick,
+  onLeaveClick,
 }: CardProps) {
   return (
     <div ref={cardContainerRef} className="w-[min(90vw,420px)] relative z-10">
@@ -51,7 +45,6 @@ export function Card({
         onClick={onCardToggle}
         onKeyDown={onCardKeyDown}
         aria-label={isFlipped ? "Show front of card" : "Show back of card"}
-        aria-disabled={!canFlipCard}
       >
         <div ref={cardRef} className="flip-card">
           <div className="card-face card-front">
@@ -82,20 +75,12 @@ export function Card({
                 </p>
               </div>
               <div className="absolute bottom-[clamp(1.75rem,4vw,2.5rem)] right-[clamp(1.75rem,4vw,2.5rem)] flex flex-col items-end space-y-0.5">
-                <button
-                  type="button"
-                  className={buttonLinkClass}
-                  onClick={onWorkClick}
-                >
+                <a href="/work" className={linkClass} onClick={onLeaveClick}>
                   WORK
-                </button>
-                <button
-                  type="button"
-                  className={buttonLinkClass}
-                  onClick={onContactClick}
-                >
+                </a>
+                <a href="/contact" className={linkClass} onClick={onLeaveClick}>
                   CONTACT
-                </button>
+                </a>
               </div>
             </div>
           </div>
@@ -120,7 +105,7 @@ export function Card({
                     <a
                       href={links.thoughts}
                       className={linkClass}
-                      onClick={onThoughtsClick}
+                      onClick={onLeaveClick}
                     >
                       THOUGHTS
                     </a>

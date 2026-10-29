@@ -1,24 +1,17 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import gsap from 'gsap';
 import { Card } from '@/app/components/card';
-import { Contact } from '@/app/components/contact';
-import { Work } from '@/app/components/work';
-
-type Panel = 'contact' | 'work' | null;
 
 /** Slack around a link before the card levels out for it, and before it tilts again. */
 const TARGET_ENTER_PAD = 6;
 const TARGET_EXIT_PAD = 14;
 
-type CardFolioProps = {
-  initialPanel?: Panel;
-};
-
-export function CardFolio({ initialPanel = null }: CardFolioProps) {
+export function CardFolio() {
+  const router = useRouter();
   const [isFlipped, setIsFlipped] = useState(false);
-  const [activePanel, setActivePanel] = useState<Panel>(initialPanel);
   const [cardStable, setCardStable] = useState(true);
   const [showHint, setShowHint] = useState(false);
 
@@ -31,8 +24,6 @@ export function CardFolio({ initialPanel = null }: CardFolioProps) {
   const isMousePointer = useRef(false);
   const isFlipping = useRef(false);
   const timelineRef = useRef<gsap.core.Timeline | null>(null);
-
-  const canFlipCard = activePanel === null;
 
   useEffect(() => {
     if (!localStorage.getItem('hasFlipped')) {
@@ -55,12 +46,11 @@ export function CardFolio({ initialPanel = null }: CardFolioProps) {
     };
   }, []);
 
-  // A back-navigation from the external thoughts site can restore this page from
-  // bfcache with the exit animation's inline transforms still applied, leaving the
-  // card parked off-screen. Put it back where it belongs whenever the page is shown.
+  // A back-navigation can restore this page from bfcache with the exit animation's
+  // inline transforms still applied, leaving the card parked off-screen. Put it back
+  // where it belongs whenever the page is shown.
   useEffect(() => {
     const onPageShow = () => {
-      if (activePanel !== null) return;
       timelineRef.current?.kill();
       isFlipping.current = false;
       if (cardContainerRef.current) {
@@ -78,7 +68,7 @@ export function CardFolio({ initialPanel = null }: CardFolioProps) {
 
     window.addEventListener('pageshow', onPageShow);
     return () => window.removeEventListener('pageshow', onPageShow);
-  }, [activePanel]);
+  }, []);
 
   const animateFlip = () => {
     if (!cardRef.current) return;
@@ -220,8 +210,8 @@ export function CardFolio({ initialPanel = null }: CardFolioProps) {
   };
 
   /**
-   * Spins the card upright then flings it off the top of the screen. Used both when
-   * opening a panel and when leaving for the external thoughts site. Returns false
+   * Spins the card upright then flings it off the top of the screen on the way to
+   * one of the site's pages. Returns false
    * when the card isn't mounted yet, so callers can fall back to no animation.
    */
   const animateCardExit = useCallback(
@@ -260,83 +250,21 @@ export function CardFolio({ initialPanel = null }: CardFolioProps) {
     [clearPointerTarget],
   );
 
-  const animateOpenPanel = useCallback(
-    (panel: Panel) => {
-      animateCardExit(() => setActivePanel(panel));
-    },
-    [animateCardExit],
-  );
-
-  const animateClosePanel = useCallback(() => {
-    const container = cardContainerRef.current;
-    const card = cardRef.current;
-    if (!container || !card) return;
-
-    setActivePanel(null);
-
-    timelineRef.current?.kill();
-    const tl = gsap.timeline({
-      onComplete: () => {
-        isFlipping.current = false;
-        setCardStable(true);
-      },
-    });
-    timelineRef.current = tl;
-
-    tl.to(container, {
-      y: '0%',
-      duration: 0.6,
-      ease: 'power2.out',
-    }).to(
-      card,
-      {
-        rotateZ: 0,
-        duration: 0.6,
-        ease: 'power3.inOut',
-      },
-      '-=0.1',
-    );
-  }, []);
-
-  useEffect(() => {
-    const onPopState = (e: PopStateEvent) => {
-      const panel = (e.state?.panel as Panel) ?? null;
-      if (panel) {
-        animateOpenPanel(panel);
-      } else {
-        animateClosePanel();
-      }
-    };
-
-    window.addEventListener('popstate', onPopState);
-    return () => window.removeEventListener('popstate', onPopState);
-  }, [animateOpenPanel, animateClosePanel]);
-
-  const openPanel = (panel: Panel) => (e: React.MouseEvent) => {
-    e.stopPropagation();
-    history.pushState({ panel }, '', `/${panel}`);
-    animateOpenPanel(panel);
-  };
-
-  const handleThoughtsClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleLeaveClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.stopPropagation();
 
     if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
 
     e.preventDefault();
 
-    const destination = e.currentTarget.href;
-    if (!animateCardExit(() => window.location.assign(destination))) {
-      window.location.assign(destination);
+    const destination = e.currentTarget.getAttribute('href') ?? '/';
+    if (!animateCardExit(() => router.push(destination))) {
+      router.push(destination);
     }
   };
 
-  const handleClosePanel = () => {
-    history.back();
-  };
-
   const flipCard = (direction: 1 | -1) => {
-    if (!canFlipCard || isFlipping.current) return;
+    if (isFlipping.current) return;
     clearPointerTarget();
     rotationState.current.base += 180 * direction;
     setIsFlipped((f) => !f);
@@ -389,23 +317,18 @@ export function CardFolio({ initialPanel = null }: CardFolioProps) {
         cardRef={cardRef}
         cardContainerRef={cardContainerRef}
         isFlipped={isFlipped}
-        canFlipCard={canFlipCard}
         onCardToggle={handleCardToggle}
         onCardKeyDown={handleCardKeyDown}
         onPointerEnter={handlePointerEnter}
         onPointerMove={handlePointerMove}
         onPointerLeave={handlePointerLeave}
-        onWorkClick={openPanel('work')}
-        onContactClick={openPanel('contact')}
-        onThoughtsClick={handleThoughtsClick}
+        onLeaveClick={handleLeaveClick}
       />
       <p className={`text-xs uppercase tracking-wide text-neutral-600 transition-opacity duration-300 ${
         showHint && cardStable ? 'opacity-100' : 'opacity-0'
       }`}>
         tap to flip
       </p>
-      <Contact isOpen={activePanel === 'contact'} onClose={handleClosePanel} />
-      <Work isOpen={activePanel === 'work'} onClose={handleClosePanel} />
     </main>
   );
 }

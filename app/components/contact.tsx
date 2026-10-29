@@ -1,22 +1,17 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { Panel } from '@/app/components/panel';
 import { links, profile } from '@/lib/data';
 
 const socials = [
+  { href: links.github, label: 'github.com/rawnak-rr' },
   { href: links.linkedin, label: 'linkedin.com/in/xdefT' },
   { href: links.x, label: 'x.com/xdeflickz' },
 ];
 
-const rowClass = 'block text-white/80 hover:text-white transition-colors';
+const rowClass = 'block py-2 text-body transition-colors hover:text-ink';
 
-type ContactProps = {
-  isOpen: boolean;
-  onClose: () => void;
-};
-
-export function Contact({ isOpen, onClose }: ContactProps) {
+export function Contact() {
   const [emailCopied, setEmailCopied] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout>>(null);
 
@@ -34,27 +29,25 @@ export function Contact({ isOpen, onClose }: ContactProps) {
   };
 
   return (
-    <Panel isOpen={isOpen} onClose={onClose}>
-      <div className='flex-1 flex items-center justify-center'>
-        <div className='space-y-4 text-sm tracking-wide'>
-          <button
-            type='button'
-            className={`${rowClass} bg-transparent border-0 cursor-pointer p-0 text-sm tracking-wide`}
-            onClick={handleCopyEmail}>
-            {emailCopied ? 'copied!' : profile.email}
-          </button>
-          {socials.map((social) => (
-            <a
-              key={social.href}
-              href={social.href}
-              target='_blank'
-              rel='noopener noreferrer'
-              className={rowClass}>
-              {social.label}
-            </a>
-          ))}
-        </div>
-      </div>
-    </Panel>
+    <div className="flex flex-col items-start text-[0.95rem]">
+      <button
+        type="button"
+        className={`${rowClass} cursor-pointer border-0 bg-transparent px-0 text-left`}
+        onClick={handleCopyEmail}
+      >
+        {emailCopied ? 'copied!' : profile.email}
+      </button>
+      {socials.map((social) => (
+        <a
+          key={social.href}
+          href={social.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={rowClass}
+        >
+          {social.label}
+        </a>
+      ))}
+    </div>
   );
 }

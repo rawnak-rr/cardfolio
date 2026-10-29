@@ -1,57 +1,48 @@
 'use client';
 
 import { useState } from 'react';
-import { Panel } from '@/app/components/panel';
 import { workItems } from '@/lib/data';
 
-type WorkProps = {
-  isOpen: boolean;
-  onClose: () => void;
-};
-
-export function Work({ isOpen, onClose }: WorkProps) {
-  const [openCompany, setOpenCompany] = useState('');
+export function Work() {
+  const [openCompany, setOpenCompany] = useState(workItems[0]?.company ?? '');
 
   return (
-    <Panel isOpen={isOpen} onClose={onClose}>
-      <div className='flex-1 space-y-4 overflow-y-auto pr-1'>
-        {workItems.map((item) => {
-          const isExpanded = item.company === openCompany;
+    <div className="space-y-8">
+      {workItems.map((item) => {
+        const isExpanded = item.company === openCompany;
+        const summaryId = `work-${item.company.replace(/\W+/g, '-').toLowerCase()}`;
 
-          return (
-            <section
-              key={item.company}
-              className='border-b border-white/10 pb-4 last:border-b-0'>
-              <button
-                type='button'
-                className='w-full text-left'
-                aria-expanded={isExpanded}
-                onClick={() => setOpenCompany(isExpanded ? '' : item.company)}>
-                <div className='flex items-baseline justify-between gap-4 text-sm'>
-                  <div className='flex min-w-0 items-baseline gap-2 text-white/92'>
-                    <span className='shrink-0 whitespace-nowrap text-xs text-white/42'>
-                      {isExpanded ? '[-]' : '[+]'}
-                    </span>
-                    <span className='uppercase'>{item.company}</span>
-                  </div>
-                  <span className='shrink-0 text-xs text-white/42'>
-                    {item.date}
-                  </span>
-                </div>
-                <p className='mt-1.5 pl-7 text-xs uppercase tracking-[0.08em] text-white/42 sm:pl-8'>
-                  {item.role}
-                </p>
-              </button>
+        return (
+          <section key={item.company}>
+            <button
+              type="button"
+              className="grid w-full cursor-pointer grid-cols-[1rem_minmax(0,1fr)_auto] gap-x-3 gap-y-1 text-left"
+              aria-expanded={isExpanded}
+              aria-controls={summaryId}
+              onClick={() => setOpenCompany(isExpanded ? '' : item.company)}
+            >
+              <span className="text-muted">{isExpanded ? '–' : '+'}</span>
+              <span className="text-[0.95rem] text-ink">{item.company}</span>
+              <span className="text-[0.7rem] text-muted">{item.date}</span>
+              <span />
+              <span className="text-[0.8rem] text-muted">{item.role}</span>
+            </button>
 
-              {isExpanded ? (
-                <p className='mt-3 pl-7 text-sm leading-relaxed text-white/62 sm:pl-8'>
+            <div
+              id={summaryId}
+              className="tree-children"
+              data-collapsed={!isExpanded}
+              inert={!isExpanded}
+            >
+              <div className="min-h-0 overflow-hidden">
+                <p className="mb-0 ml-7 mt-4 text-[0.95rem] leading-[1.85] text-body">
                   {item.summary}
                 </p>
-              ) : null}
-            </section>
-          );
-        })}
-      </div>
-    </Panel>
+              </div>
+            </div>
+          </section>
+        );
+      })}
+    </div>
   );
 }
