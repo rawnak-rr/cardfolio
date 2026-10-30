@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+import { cardReturn } from '@/lib/card-return';
 import type { PostSummary } from '@/lib/posts';
 
 type SidebarProps = {
@@ -31,6 +32,10 @@ export function Sidebar({ posts }: SidebarProps) {
   const currentIndex = posts.findIndex((post) => post.slug === currentSlug);
 
   const ariaCurrent = (href: string) => (pathname === href ? 'page' : undefined);
+
+  useEffect(() => {
+    cardReturn.pending = true;
+  }, []);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {

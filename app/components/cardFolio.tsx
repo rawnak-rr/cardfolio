@@ -1,9 +1,11 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import gsap from 'gsap';
 import { Card } from '@/app/components/card';
+import { cardReturn } from '@/lib/card-return';
+import { links } from '@/lib/data';
 
 /** Slack around a link before the card levels out for it, and before it tilts again. */
 const TARGET_ENTER_PAD = 6;
@@ -31,15 +33,56 @@ export function CardFolio() {
     }
   }, []);
 
+  // OPEN is a plain <a> (it has to wait for the exit animation), so nothing prefetches
+  // the site behind it. Fetch it now so the push at the end of the animation is instant.
   useEffect(() => {
+    router.prefetch(links.thoughts);
+  }, [router]);
+
+  // Layout effect so a returning card is parked off-screen before the first paint.
+  useLayoutEffect(() => {
     const el = cardRef.current;
-    if (!el) return;
+    const container = cardContainerRef.current;
+    if (!el || !container) return;
     gsap.set(el, {
       rotateX: 0,
       rotateY: 0,
       transformPerspective: 1600,
       transformOrigin: '50% 50%',
     });
+
+    // Coming back from the site: drop the card back in, the exit animation in reverse.
+    // The flag is cleared on completion, not here, so a Strict Mode remount (which
+    // kills this timeline in cleanup) replays the drop-in instead of stranding the card.
+    if (cardReturn.pending) {
+      isFlipping.current = true;
+      setCardStable(false);
+      gsap.set(container, { y: '-250%' });
+      gsap.set(el, { rotateZ: 90 });
+
+      const tl = gsap.timeline({
+        onComplete: () => {
+          cardReturn.pending = false;
+          isFlipping.current = false;
+          setCardStable(true);
+        },
+      });
+      timelineRef.current = tl;
+      tl.to(container, {
+        y: '0%',
+        duration: 0.6,
+        ease: 'power2.out',
+      }).to(
+        el,
+        {
+          rotateZ: 0,
+          duration: 0.6,
+          ease: 'power3.inOut',
+        },
+        '-=0.1',
+      );
+    }
+
     return () => {
       gsap.killTweensOf(el);
       timelineRef.current?.kill();

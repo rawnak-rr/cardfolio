@@ -1,8 +1,6 @@
 export const profile = {
   name: 'rawnak',
   role: 'fullstack developer',
-  /** Words in `role` rendered bold on the card front. */
-  roleEmphasis: ['fullstack'],
   study: 'UNSW',
   email: 'rawnakd11@gmail.com',
 };

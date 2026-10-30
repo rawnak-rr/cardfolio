@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Space_Mono } from 'next/font/google';
+import localFont from 'next/font/local';
 import {
   absoluteUrl,
   routeMetadata,
@@ -10,9 +10,16 @@ import {
 } from '@/lib/seo';
 import './globals.css';
 
-const spaceMono = Space_Mono({
-  weight: ['400', '700'],
-  subsets: ['latin'],
+const iosevka = localFont({
+  src: [
+    {
+      path: '../node_modules/@fontsource/iosevka/files/iosevka-latin-400-normal.woff2',
+      weight: '400',
+      style: 'normal',
+    },
+  ],
+  display: 'swap',
+  fallback: ['SFMono-Regular', 'Menlo', 'monospace'],
 });
 
 export const metadata: Metadata = {
@@ -81,7 +88,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${spaceMono.className} bg-black text-neutral-100`}>
+      <body className={`${iosevka.className} bg-black text-neutral-100`}>
         {children}
       </body>
     </html>
