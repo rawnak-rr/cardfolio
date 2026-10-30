@@ -7,7 +7,7 @@ export const metadata: Metadata = pageMetadata('work');
 export default function WorkPage() {
   return (
     <section aria-labelledby="work-title">
-      <h1 id="work-title" className="mb-8 text-[0.7rem] font-normal text-muted">
+      <h1 id="work-title" className="sr-only">
         work
       </h1>
       <Work />

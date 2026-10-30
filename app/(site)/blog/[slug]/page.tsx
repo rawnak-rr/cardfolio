@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
   return {
     title: `${post.title} | rawnak`,
     description: post.description,
-    alternates: { canonical: `/thoughts/${post.slug}` },
+    alternates: { canonical: `/blog/${post.slug}` },
   };
 }
 
@@ -51,14 +51,14 @@ export default async function PostPage({ params }: PostPageProps) {
 
       {posts.length > 1 ? (
         <nav
-          aria-label="More thoughts"
+          aria-label="More posts"
           className="mt-20 flex justify-between gap-6 border-t border-rule pt-5 text-[0.75rem] text-muted"
         >
-          <Link href={`/thoughts/${previous.slug}`} className="transition-colors hover:text-ink">
+          <Link href={`/blog/${previous.slug}`} className="transition-colors hover:text-ink">
             ← {previous.title}
           </Link>
           <Link
-            href={`/thoughts/${next.slug}`}
+            href={`/blog/${next.slug}`}
             className="text-right transition-colors hover:text-ink"
           >
             {next.title} →

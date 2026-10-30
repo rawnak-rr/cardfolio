@@ -36,7 +36,7 @@ export function CardFolio() {
   // OPEN is a plain <a> (it has to wait for the exit animation), so nothing prefetches
   // the site behind it. Fetch it now so the push at the end of the animation is instant.
   useEffect(() => {
-    router.prefetch(links.thoughts);
+    router.prefetch(links.summary);
   }, [router]);
 
   // Layout effect so a returning card is parked off-screen before the first paint.

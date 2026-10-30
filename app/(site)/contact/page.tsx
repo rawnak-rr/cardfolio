@@ -7,7 +7,7 @@ export const metadata: Metadata = pageMetadata('contact');
 export default function ContactPage() {
   return (
     <section aria-labelledby="contact-title">
-      <h1 id="contact-title" className="mb-6 text-[0.7rem] font-normal text-muted">
+      <h1 id="contact-title" className="sr-only">
         contact
       </h1>
       <Contact />

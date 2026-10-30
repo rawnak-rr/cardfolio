@@ -24,10 +24,10 @@ export function Sidebar({ posts }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const navRef = useRef<HTMLElement>(null);
-  const [thoughtsOpen, setThoughtsOpen] = useState(true);
+  const [blogOpen, setBlogOpen] = useState(true);
 
-  const currentSlug = pathname.startsWith('/thoughts/')
-    ? pathname.slice('/thoughts/'.length)
+  const currentSlug = pathname.startsWith('/blog/')
+    ? pathname.slice('/blog/'.length)
     : null;
   const currentIndex = posts.findIndex((post) => post.slug === currentSlug);
 
@@ -64,7 +64,7 @@ export function Sidebar({ posts }: SidebarProps) {
         event.preventDefault();
         const step = event.key === 'ArrowRight' ? 1 : -1;
         const next = posts[(currentIndex + step + posts.length) % posts.length];
-        router.push(`/thoughts/${next.slug}`);
+        router.push(`/blog/${next.slug}`);
         return;
       }
 
@@ -97,13 +97,13 @@ export function Sidebar({ posts }: SidebarProps) {
           break;
         case 'l':
           event.preventDefault();
-          if (isFolder && !isOpen) setThoughtsOpen(true);
+          if (isFolder && !isOpen) setBlogOpen(true);
           else if (isFolder) rows[index + 1]?.focus();
           else row.click();
           break;
         case 'h':
           event.preventDefault();
-          if (isFolder && isOpen) setThoughtsOpen(false);
+          if (isFolder && isOpen) setBlogOpen(false);
           else if (row.dataset.treeParent) {
             nav.querySelector<HTMLElement>(row.dataset.treeParent)?.focus();
           }
@@ -127,37 +127,47 @@ export function Sidebar({ posts }: SidebarProps) {
 
       <ul className="tree">
         <li>
-          <button
-            type="button"
-            id="tree-thoughts-toggle"
+          <Link
+            href="/summary"
             data-tree-row
-            aria-expanded={thoughtsOpen}
-            aria-controls="tree-thoughts"
-            onClick={() => setThoughtsOpen((open) => !open)}
+            aria-current={ariaCurrent('/summary')}
             className="tree-row"
           >
-            <span className="tree-label">thoughts</span>
+            summary
+          </Link>
+        </li>
+        <li>
+          <button
+            type="button"
+            id="tree-blog-toggle"
+            data-tree-row
+            aria-expanded={blogOpen}
+            aria-controls="tree-blog"
+            onClick={() => setBlogOpen((open) => !open)}
+            className="tree-row"
+          >
+            <span className="tree-label">blog</span>
             <span className="tree-chevron" aria-hidden="true">
               ▾
             </span>
           </button>
 
           <div
-            id="tree-thoughts"
+            id="tree-blog"
             className="tree-children"
-            data-collapsed={!thoughtsOpen}
-            inert={!thoughtsOpen}
+            data-collapsed={!blogOpen}
+            inert={!blogOpen}
           >
             <ul className="tree">
               {posts.map((post) => {
-                const href = `/thoughts/${post.slug}`;
+                const href = `/blog/${post.slug}`;
                 return (
                   <li key={post.slug}>
                     <Link
                       href={href}
                       title={post.title}
                       data-tree-row
-                      data-tree-parent="#tree-thoughts-toggle"
+                      data-tree-parent="#tree-blog-toggle"
                       aria-current={ariaCurrent(href)}
                       className="tree-row"
                     >

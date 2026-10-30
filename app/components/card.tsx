@@ -86,7 +86,7 @@ export function Card({
               >
                 {emailCopied ? "copied!" : profile.email}
               </button>
-              <a href={links.thoughts} className={linkClass} onClick={onLeaveClick}>
+              <a href={links.summary} className={linkClass} onClick={onLeaveClick}>
                 open →
               </a>
             </div>
