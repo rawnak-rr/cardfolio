@@ -32,7 +32,7 @@ export function Contact() {
     <div className="flex flex-col items-start text-[0.95rem]">
       <button
         type="button"
-        className={`${rowClass} cursor-pointer border-0 bg-transparent px-0 text-left`}
+        className={`${rowClass} cursor-pointer border-0 bg-transparent px-0`}
         onClick={handleCopyEmail}
       >
         {emailCopied ? 'copied!' : profile.email}

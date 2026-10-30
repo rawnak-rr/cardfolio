@@ -38,7 +38,7 @@ export function PhotoNote({ alt, children, side = 'left', ...imageProps }: Photo
 
 export function StorySummary({ children }: { children: ReactNode }) {
   return (
-    <footer className="border-t border-rule pt-8 text-[0.95rem] leading-[1.85] text-body [&>p]:m-0 [&>p]:text-pretty">
+    <footer className="text-[0.95rem] leading-[1.85] text-body [&>p]:m-0 [&>p]:text-pretty">
       {children}
     </footer>
   );

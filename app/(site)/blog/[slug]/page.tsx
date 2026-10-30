@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { formatPostDate, getAllPosts, getPost } from '@/lib/posts';
@@ -30,10 +29,6 @@ export default async function PostPage({ params }: PostPageProps) {
   if (!post) notFound();
 
   const { Content } = post;
-  const posts = getAllPosts();
-  const index = posts.findIndex((entry) => entry.slug === slug);
-  const previous = posts[(index - 1 + posts.length) % posts.length];
-  const next = posts[(index + 1) % posts.length];
 
   return (
     <article>
@@ -48,23 +43,6 @@ export default async function PostPage({ params }: PostPageProps) {
       <div className="mt-12 [&>:first-child]:!mt-0">
         <Content />
       </div>
-
-      {posts.length > 1 ? (
-        <nav
-          aria-label="More posts"
-          className="mt-20 flex justify-between gap-6 border-t border-rule pt-5 text-[0.75rem] text-muted"
-        >
-          <Link href={`/blog/${previous.slug}`} className="transition-colors hover:text-ink">
-            ← {previous.title}
-          </Link>
-          <Link
-            href={`/blog/${next.slug}`}
-            className="text-right transition-colors hover:text-ink"
-          >
-            {next.title} →
-          </Link>
-        </nav>
-      ) : null}
     </article>
   );
 }

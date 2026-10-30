@@ -1,16 +1,21 @@
 import type { ReactNode } from 'react';
+import { MobileBar } from '@/app/components/site/mobile-bar';
 import { Sidebar } from '@/app/components/site/sidebar';
 import { getPostSummaries } from '@/lib/posts';
 
 export default function SiteLayout({ children }: { children: ReactNode }) {
+  const posts = getPostSummaries();
+
   return (
     <div className="min-h-dvh bg-black text-ink md:grid md:grid-cols-[21rem_minmax(0,1fr)]">
-      <aside className="border-b border-rule px-6 py-8 md:sticky md:top-0 md:h-dvh md:overflow-y-auto md:border-b-0 md:px-8 md:py-14">
-        <Sidebar posts={getPostSummaries()} />
+      {/* Phones get the bottom bar instead; the sidebar stays mounted for its card-return flag. */}
+      <aside className="hidden md:sticky md:top-0 md:block md:h-dvh md:overflow-y-auto md:px-8 md:py-14">
+        <Sidebar posts={posts} />
       </aside>
       <main className="min-w-0 px-6 pb-24 pt-12 md:pt-24">
         <div className="mx-auto w-full max-w-[38rem]">{children}</div>
       </main>
+      <MobileBar posts={posts} />
     </div>
   );
 }
