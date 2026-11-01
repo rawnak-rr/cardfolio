@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
+import { PageHeader } from '@/app/components/site/page-header';
 import { formatPostDate, getPostsForProject } from '@/lib/posts';
 import { getProject, projects } from '@/lib/projects';
 
@@ -25,7 +26,6 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
   };
 }
 
-const paragraphClass = 'text-pretty text-[0.95rem] leading-[1.85] text-body';
 const headingClass = 'text-[0.7rem] text-muted';
 
 export default async function ProjectPage({ params }: ProjectPageProps) {
@@ -37,17 +37,15 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
   return (
     <article>
-      <p className="text-[0.7rem] text-muted">
-        since {project.started} · {project.stack.join(', ')}
-      </p>
-      <h1 className="mt-3 text-[1.75rem] font-normal leading-[1.15] text-ink sm:text-[2rem]">
-        {project.name}
-      </h1>
+      <PageHeader
+        meta={`since ${project.started} · ${project.stack.join(', ')}`}
+        title={project.name}
+      />
       <p className="mt-4 text-[0.95rem] text-ink">{project.tagline}</p>
 
       <div className="mt-12 space-y-6">
         {project.about.map((paragraph) => (
-          <p key={paragraph} className={paragraphClass}>
+          <p key={paragraph} className="body-text">
             {paragraph}
           </p>
         ))}

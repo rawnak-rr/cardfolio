@@ -9,7 +9,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     ),
     h3: ({ children }) => <h3 className="mt-10 text-base leading-tight text-ink">{children}</h3>,
     p: ({ children }) => (
-      <p className="mt-6 text-pretty text-[0.95rem] leading-[1.85] text-body">{children}</p>
+      <p className="body-text mt-6">{children}</p>
     ),
     a: ({ children, href }) => (
       <a className="article-link" href={href}>

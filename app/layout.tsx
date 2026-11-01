@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import localFont from 'next/font/local';
 import {
   absoluteUrl,
+  ogImageAlt,
   routeMetadata,
   seoKeywords,
   siteDescription,
@@ -49,7 +50,7 @@ export const metadata: Metadata = {
         url: absoluteUrl('/opengraph-image'),
         width: 1200,
         height: 630,
-        alt: 'rawnak fullstack developer portfolio card',
+        alt: ogImageAlt,
       },
     ],
   },

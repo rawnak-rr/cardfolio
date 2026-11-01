@@ -15,13 +15,14 @@ export const siteUrl = normalizeSiteUrl(
 
 export const siteName = 'rawnak';
 
-export const siteDescription =
-  'rawnak is a Sydney-based fullstack developer and UNSW Computer Science student building telemetry, edtech/education and matchmaking software';
+export const siteDescription = `rawnak is a Sydney-based ${profile.role} and UNSW Computer Science student building telemetry, edtech/education and matchmaking software`;
+
+export const ogImageAlt = `${profile.name} ${profile.role} portfolio card`;
 
 export const seoKeywords = [
   'rawnak',
   'rawnak portfolio',
-  'fullstack developer',
+  profile.role,
   'Sydney software engineer',
   'UNSW computer science',
   'vehicle analytics',
@@ -84,7 +85,7 @@ export function personJsonLd() {
     '@type': 'Person',
     name: profile.name,
     url: siteUrl,
-    jobTitle: 'Fullstack Developer',
+    jobTitle: profile.role,
     email: `mailto:${profile.email}`,
     sameAs: [links.github, links.linkedin, links.x],
     affiliation: {

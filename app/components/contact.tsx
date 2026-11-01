@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useCopyEmail } from '@/app/components/use-copy-email';
 import { links, profile } from '@/lib/data';
 
 const socials = [
@@ -12,30 +12,16 @@ const socials = [
 const rowClass = 'block py-2 text-body transition-colors hover:text-ink';
 
 export function Contact() {
-  const [emailCopied, setEmailCopied] = useState(false);
-  const timerRef = useRef<ReturnType<typeof setTimeout>>(null);
-
-  useEffect(() => {
-    return () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
-    };
-  }, []);
-
-  const handleCopyEmail = () => {
-    navigator.clipboard.writeText(profile.email);
-    setEmailCopied(true);
-    if (timerRef.current) clearTimeout(timerRef.current);
-    timerRef.current = setTimeout(() => setEmailCopied(false), 2000);
-  };
+  const email = useCopyEmail();
 
   return (
     <div className="flex flex-col items-start text-[0.95rem]">
       <button
         type="button"
-        className={`${rowClass} cursor-pointer border-0 bg-transparent px-0`}
-        onClick={handleCopyEmail}
+        className={`${rowClass} cursor-pointer px-0`}
+        onClick={email.copy}
       >
-        {emailCopied ? 'copied!' : profile.email}
+        {email.copied ? 'copied!' : profile.email}
       </button>
       {socials.map((social) => (
         <a

@@ -1,11 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import type { KeyboardEvent, MouseEvent, PointerEvent, RefObject } from "react";
+import { useCopyEmail } from "@/app/components/use-copy-email";
 import { links, profile } from "@/lib/data";
 
-const headingClass = "text-sm text-black";
-const labelClass = "text-sm text-black";
+const textClass = "text-sm text-black";
 const linkClass = "dotted-link text-sm text-black px-1 py-0.5";
 
 type CardProps = {
@@ -31,21 +30,11 @@ export function Card({
   onPointerLeave,
   onLeaveClick,
 }: CardProps) {
-  const [emailCopied, setEmailCopied] = useState(false);
-  const copiedTimer = useRef<ReturnType<typeof setTimeout>>(null);
-
-  useEffect(() => {
-    return () => {
-      if (copiedTimer.current) clearTimeout(copiedTimer.current);
-    };
-  }, []);
+  const email = useCopyEmail();
 
   const handleCopyEmail = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    navigator.clipboard.writeText(profile.email);
-    setEmailCopied(true);
-    if (copiedTimer.current) clearTimeout(copiedTimer.current);
-    copiedTimer.current = setTimeout(() => setEmailCopied(false), 2000);
+    email.copy();
   };
 
   return (
@@ -65,9 +54,9 @@ export function Card({
           <div className="card-face card-front">
             <div className="flex h-full flex-col justify-end">
               <div className="space-y-0.5 text-left">
-                <h1 className={headingClass}>{profile.name}</h1>
-                <p className={labelClass}>{profile.role}</p>
-                <p className={labelClass}>
+                <h1 className={textClass}>{profile.name}</h1>
+                <p className={textClass}>{profile.role}</p>
+                <p className={textClass}>
                   compsci <span className="font-sans">@</span>
                   {profile.study}
                 </p>
@@ -77,13 +66,24 @@ export function Card({
 
           <div className="card-face card-back">
             <div className="relative z-10 flex h-full items-end justify-between">
-              <button
-                type="button"
-                className={`${linkClass} cursor-pointer bg-transparent`}
-                onClick={handleCopyEmail}
-              >
-                {emailCopied ? "copied!" : profile.email}
-              </button>
+              <div className="flex flex-col items-start gap-2">
+                <button
+                  type="button"
+                  className={`${linkClass} cursor-pointer`}
+                  onClick={handleCopyEmail}
+                >
+                  {email.copied ? "copied!" : profile.email}
+                </button>
+                <a
+                  href={links.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={linkClass}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  github.com/rawnak-rr
+                </a>
+              </div>
               <a href={links.summary} className={linkClass} onClick={onLeaveClick}>
                 open →
               </a>

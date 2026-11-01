@@ -4,17 +4,8 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { cardReturn } from '@/lib/card-return';
-import type { PostSummary } from '@/lib/posts';
-import type { Project } from '@/lib/projects';
-
-type SidebarProps = {
-  posts: PostSummary[];
-  projects: Project[];
-};
-
-type FolderName = 'blog' | 'projects';
-
-type FolderItem = { href: string; title: string };
+import { links } from '@/lib/data';
+import type { FolderName, NavFolders } from '@/lib/nav';
 
 const ROW = '[data-tree-row]';
 
@@ -26,7 +17,7 @@ function isEditableTarget(target: EventTarget | null) {
   );
 }
 
-export function Sidebar({ posts, projects }: SidebarProps) {
+export function Sidebar({ folders }: { folders: NavFolders }) {
   const pathname = usePathname();
   const router = useRouter();
   const navRef = useRef<HTMLElement>(null);
@@ -35,19 +26,19 @@ export function Sidebar({ posts, projects }: SidebarProps) {
     projects: true,
   });
 
-  const setFolderOpen = (name: FolderName, open: boolean) =>
-    setOpenFolders((folders) => ({ ...folders, [name]: open }));
 
-  const currentSlug = pathname.startsWith('/blog/')
-    ? pathname.slice('/blog/'.length)
-    : null;
-  const currentIndex = posts.findIndex((post) => post.slug === currentSlug);
+  const posts = folders.blog;
+  const currentIndex = posts.findIndex((post) => post.href === pathname);
 
   const ariaCurrent = (href: string) => (pathname === href ? 'page' : undefined);
 
   useEffect(() => {
     cardReturn.pending = true;
   }, []);
+
+  function setFolderOpen(name: FolderName, open: boolean) {
+    setOpenFolders((current) => ({ ...current, [name]: open }));
+  }
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -74,7 +65,7 @@ export function Sidebar({ posts, projects }: SidebarProps) {
         event.preventDefault();
         const step = event.key === 'ArrowRight' ? 1 : -1;
         const next = posts[(currentIndex + step + posts.length) % posts.length];
-        router.push(`/blog/${next.slug}`);
+        router.push(next.href);
         return;
       }
 
@@ -106,13 +97,13 @@ export function Sidebar({ posts, projects }: SidebarProps) {
           break;
         case 'l':
           event.preventDefault();
-          if (folder && !isOpen) setOpenFolders((folders) => ({ ...folders, [folder]: true }));
+          if (folder && !isOpen) setFolderOpen(folder, true);
           else if (folder) rows[index + 1]?.focus();
           else row.click();
           break;
         case 'h':
           event.preventDefault();
-          if (folder && isOpen) setOpenFolders((folders) => ({ ...folders, [folder]: false }));
+          if (folder && isOpen) setFolderOpen(folder, false);
           else if (row.dataset.treeParent) {
             nav.querySelector<HTMLElement>(row.dataset.treeParent)?.focus();
           }
@@ -128,7 +119,7 @@ export function Sidebar({ posts, projects }: SidebarProps) {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [currentIndex, posts, router]);
 
-  const renderFolder = (name: FolderName, items: FolderItem[]) => {
+  const renderFolder = (name: FolderName) => {
     const open = openFolders[name];
     return (
       <li>
@@ -150,7 +141,7 @@ export function Sidebar({ posts, projects }: SidebarProps) {
 
         <div id={`tree-${name}`} className="tree-children" data-collapsed={!open} inert={!open}>
           <ul className="tree">
-            {items.map((item) => (
+            {folders[name].map((item) => (
               <li key={item.href}>
                 <Link
                   href={item.href}
@@ -179,22 +170,16 @@ export function Sidebar({ posts, projects }: SidebarProps) {
       <ul className="tree">
         <li>
           <Link
-            href="/summary"
+            href={links.summary}
             data-tree-row
-            aria-current={ariaCurrent('/summary')}
+            aria-current={ariaCurrent(links.summary)}
             className="tree-row"
           >
             summary
           </Link>
         </li>
-        {renderFolder(
-          'blog',
-          posts.map((post) => ({ href: `/blog/${post.slug}`, title: post.title })),
-        )}
-        {renderFolder(
-          'projects',
-          projects.map((project) => ({ href: `/projects/${project.slug}`, title: project.name })),
-        )}
+        {renderFolder('blog')}
+        {renderFolder('projects')}
         <li>
           <Link href="/work" data-tree-row aria-current={ariaCurrent('/work')} className="tree-row">
             work

@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import gsap from 'gsap';
 import { Card } from '@/app/components/card';
@@ -19,7 +19,6 @@ export function CardFolio() {
   const cardRef = useRef<HTMLDivElement>(null);
   const cardContainerRef = useRef<HTMLDivElement>(null);
   const rotationState = useRef({ base: 0, tiltX: 0, tiltY: 0 });
-  const hoveredTarget = useRef<Element | null>(null);
   const levelTarget = useRef<Element | null>(null);
   const isRoutingClick = useRef(false);
   const isMousePointer = useRef(false);
@@ -155,22 +154,8 @@ export function CardFolio() {
     return targetUnder(clientX, clientY, TARGET_ENTER_PAD);
   };
 
-  const markPointerOver = useCallback((target: Element | null) => {
-    if (hoveredTarget.current === target) return;
-    hoveredTarget.current?.removeAttribute('data-pointer-over');
-    target?.setAttribute('data-pointer-over', '');
-    hoveredTarget.current = target;
-  }, []);
-
-  const clearPointerTarget = useCallback(() => {
-    markPointerOver(null);
-    levelTarget.current = null;
-  }, [markPointerOver]);
-
   const handlePointerMove = (e: React.PointerEvent) => {
     if (!isMousePointer.current || !cardRef.current || isFlipping.current) return;
-
-    markPointerOver(targetUnder(e.clientX, e.clientY));
 
     levelTarget.current = levelTargetAt(e.clientX, e.clientY);
 
@@ -208,7 +193,7 @@ export function CardFolio() {
   const handlePointerLeave = () => {
     const wasMouse = isMousePointer.current;
     isMousePointer.current = false;
-    clearPointerTarget();
+    levelTarget.current = null;
     if (!wasMouse || !cardRef.current || isFlipping.current) return;
     rotationState.current.tiltX = 0;
     rotationState.current.tiltY = 0;
@@ -221,39 +206,30 @@ export function CardFolio() {
     });
   };
 
-  const animateCardExit = useCallback(
-    (onComplete: () => void) => {
-      const container = cardContainerRef.current;
-      const card = cardRef.current;
-      if (!container || !card) return false;
+  const animateCardExit = (onComplete: () => void) => {
+    isFlipping.current = true;
+    levelTarget.current = null;
+    setCardStable(false);
+    timelineRef.current?.kill();
+    const tl = gsap.timeline({ onComplete });
+    timelineRef.current = tl;
 
-      isFlipping.current = true;
-      clearPointerTarget();
-      setCardStable(false);
-      timelineRef.current?.kill();
-      const tl = gsap.timeline({ onComplete });
-      timelineRef.current = tl;
-
-      tl.to(card, {
-        rotateX: 0,
-        rotateY: rotationState.current.base,
-        rotateZ: 90,
+    tl.to(cardRef.current, {
+      rotateX: 0,
+      rotateY: rotationState.current.base,
+      rotateZ: 90,
+      duration: 0.6,
+      ease: 'power3.inOut',
+    }).to(
+      cardContainerRef.current,
+      {
+        y: '-250%',
         duration: 0.6,
-        ease: 'power3.inOut',
-      }).to(
-        container,
-        {
-          y: '-250%',
-          duration: 0.6,
-          ease: 'power2.in',
-        },
-        '-=0.1',
-      );
-
-      return true;
-    },
-    [clearPointerTarget],
-  );
+        ease: 'power2.in',
+      },
+      '-=0.1',
+    );
+  };
 
   const handleLeaveClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.stopPropagation();
@@ -263,14 +239,12 @@ export function CardFolio() {
     e.preventDefault();
 
     const destination = e.currentTarget.getAttribute('href') ?? '/';
-    if (!animateCardExit(() => router.push(destination))) {
-      router.push(destination);
-    }
+    animateCardExit(() => router.push(destination));
   };
 
   const flipCard = (direction: 1 | -1) => {
     if (isFlipping.current) return;
-    clearPointerTarget();
+    levelTarget.current = null;
     rotationState.current.base += 180 * direction;
     setIsFlipped((f) => !f);
     if (showHint) {

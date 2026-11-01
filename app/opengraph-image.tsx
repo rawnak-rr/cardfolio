@@ -1,7 +1,8 @@
 import { ImageResponse } from 'next/og';
 import { profile } from '@/lib/data';
+import { ogImageAlt } from '@/lib/seo';
 
-export const alt = 'rawnak fullstack developer portfolio card';
+export const alt = ogImageAlt;
 export const size = {
   width: 1200,
   height: 630,

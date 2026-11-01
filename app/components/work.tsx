@@ -34,10 +34,8 @@ export function Work() {
               data-collapsed={!isExpanded}
               inert={!isExpanded}
             >
-              <div className="min-h-0 overflow-hidden">
-                <p className="mb-0 ml-7 mt-4 text-[0.95rem] leading-[1.85] text-body">
-                  {item.summary}
-                </p>
+              <div>
+                <p className="body-text mb-0 ml-7 mt-4">{item.summary}</p>
               </div>
             </div>
           </section>

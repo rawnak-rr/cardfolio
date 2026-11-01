@@ -3,20 +3,13 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import type { PostSummary } from '@/lib/posts';
-import type { Project } from '@/lib/projects';
-
-type MobileBarProps = {
-  posts: PostSummary[];
-  projects: Project[];
-};
-
-type FolderName = 'blog' | 'projects';
+import { links } from '@/lib/data';
+import type { FolderName, NavFolders } from '@/lib/nav';
 
 const tabClass =
   'px-1 py-3 text-muted transition-colors aria-[current=page]:text-ink aria-[expanded=true]:text-ink';
 
-export function MobileBar({ posts, projects }: MobileBarProps) {
+export function MobileBar({ folders }: { folders: NavFolders }) {
   const pathname = usePathname();
   const [openFolder, setOpenFolder] = useState<FolderName | null>(null);
 
@@ -25,14 +18,6 @@ export function MobileBar({ posts, projects }: MobileBarProps) {
   }, [pathname]);
 
   const ariaCurrent = (active: boolean) => (active ? 'page' : undefined);
-
-  const folders: Record<FolderName, { href: string; title: string }[]> = {
-    blog: posts.map((post) => ({ href: `/blog/${post.slug}`, title: post.title })),
-    projects: projects.map((project) => ({
-      href: `/projects/${project.slug}`,
-      title: project.name,
-    })),
-  };
 
   const tab = (href: string, label: string) => (
     <Link href={href} aria-current={ariaCurrent(pathname === href)} className={tabClass}>
@@ -88,7 +73,7 @@ export function MobileBar({ posts, projects }: MobileBarProps) {
         ) : null}
 
         <div className="flex justify-center gap-1">
-          {tab('/summary', 'summary')}
+          {tab(links.summary, 'summary')}
           {folderTab('blog')}
           {folderTab('projects')}
           {tab('/', 'card')}

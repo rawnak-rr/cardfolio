@@ -21,34 +21,28 @@ body {
   border-radius: 1.75rem;
 }
 
-/* Links on the card (the email and "open →"): dotted underline. */
+/* Links on the card (the email, github and "open →"): dotted underline. */
 .dotted-link {
   text-decoration: none;
   border-bottom: 2px dotted rgba(0, 0, 0, 0.5);
-  transition: color 0.2s ease;
 }
 
-/* Hover state for card links. `data-pointer-over` is added by JavaScript because the
-   browser's normal :hover doesn't work reliably while the card is tilted in 3D. */
-.dotted-link:hover,
-.dotted-link[data-pointer-over] {
-  color: #000;
-}
-
-/* The part that rotates when the card flips. Holds both faces and the drop shadow. */
+/* The part that rotates when the card flips. Holds both faces and the drop shadow.
+   Takes its rounded corners from .card-button. */
 .flip-card {
   position: relative;
   height: 100%;
   width: 100%;
-  border-radius: 1.75rem;
+  border-radius: inherit;
   transform-style: preserve-3d;
   box-shadow:
     0 40px 70px -24px rgba(15, 23, 42, 0.75),
     0 22px 32px -22px rgba(15, 23, 42, 0.55);
 }
 
-/* Shared by both faces. `backface-visibility: hidden` hides whichever face is
-   turned away, so only one side shows at a time. */
+/* Shared by both faces: the orange, the border and the padding.
+   `backface-visibility: hidden` hides whichever face is turned away, so only one
+   side shows at a time. */
 .card-face {
   position: absolute;
   inset: 0;
@@ -57,12 +51,12 @@ body {
   border-radius: inherit;
   border: 1px solid rgba(210, 92, 32, 0.55);
   padding: clamp(1.75rem, 4vw, 2.5rem);
+  background-color: #cc5200;
   backface-visibility: hidden;
 }
 
 /* Front face: name, role, study. The inset shadows give it a slight 3D edge. */
 .card-front {
-  background-color: #cc5200;
   box-shadow:
     inset 0 14px 30px -20px rgba(255, 186, 140, 0.3),
     inset 0 -16px 30px -22px rgba(20, 7, 0, 0.55);
@@ -71,7 +65,6 @@ body {
 /* Back face: email and "open →". Pre-rotated 180° so it faces forward once the
    card flips. */
 .card-back {
-  background-color: #cc5200;
   transform: rotateY(180deg);
   box-shadow:
     inset 0 12px 28px -18px rgba(255, 185, 120, 0.25),
@@ -102,6 +95,16 @@ body {
 /* Everything below sits in the "components" layer, so a Tailwind class written on
    an element can still override it. */
 @layer components {
+  /* ---------------------------------------------------------------------------
+     Paragraph text used across the site: blog posts, summary, projects, work.
+     ------------------------------------------------------------------------ */
+  .body-text {
+    font-size: 0.95rem;
+    line-height: 1.85;
+    color: var(--color-body);
+    text-wrap: pretty;
+  }
+
   /* ---------------------------------------------------------------------------
      Links in text (blog posts, summary): dotted underline drawn with a
      background image so it wraps neatly across lines.
@@ -233,7 +236,7 @@ body {
     opacity: 0;
   }
 
-  .tree-children > ul {
+  .tree-children > * {
     min-height: 0;
     overflow: hidden;
   }
