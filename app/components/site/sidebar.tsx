@@ -27,9 +27,6 @@ export function Sidebar({ folders }: { folders: NavFolders }) {
   });
 
 
-  const posts = folders.blog;
-  const currentIndex = posts.findIndex((post) => post.href === pathname);
-
   const ariaCurrent = (href: string) => (pathname === href ? 'page' : undefined);
 
   useEffect(() => {
@@ -60,17 +57,8 @@ export function Sidebar({ folders }: { folders: NavFolders }) {
       );
       const index = rows.indexOf(document.activeElement as HTMLElement);
 
-      if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
-        if (currentIndex === -1) return;
-        event.preventDefault();
-        const step = event.key === 'ArrowRight' ? 1 : -1;
-        const next = posts[(currentIndex + step + posts.length) % posts.length];
-        router.push(next.href);
-        return;
-      }
-
       if (index === -1) {
-        if (event.key === 'j' || event.key === 'k') {
+        if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
           event.preventDefault();
           (rows.find((row) => row.getAttribute('aria-current') === 'page') ?? rows[0])?.focus();
         } else if (event.key === 'Escape') {
@@ -85,23 +73,21 @@ export function Sidebar({ folders }: { folders: NavFolders }) {
       const isOpen = row.getAttribute('aria-expanded') === 'true';
 
       switch (event.key) {
-        case 'j':
         case 'ArrowDown':
           event.preventDefault();
           rows[Math.min(index + 1, rows.length - 1)].focus();
           break;
-        case 'k':
         case 'ArrowUp':
           event.preventDefault();
           rows[Math.max(index - 1, 0)].focus();
           break;
-        case 'l':
+        case 'ArrowRight':
           event.preventDefault();
           if (folder && !isOpen) setFolderOpen(folder, true);
           else if (folder) rows[index + 1]?.focus();
           else row.click();
           break;
-        case 'h':
+        case 'ArrowLeft':
           event.preventDefault();
           if (folder && isOpen) setFolderOpen(folder, false);
           else if (row.dataset.treeParent) {
@@ -117,7 +103,7 @@ export function Sidebar({ folders }: { folders: NavFolders }) {
 
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [currentIndex, posts, router]);
+  }, [router]);
 
   const renderFolder = (name: FolderName) => {
     const open = openFolders[name];
@@ -162,7 +148,7 @@ export function Sidebar({ folders }: { folders: NavFolders }) {
   };
 
   return (
-    <nav ref={navRef} aria-label="Site" className="text-[0.8rem]">
+    <nav ref={navRef} aria-label="Site" className="text-sm">
       <Link href="/" data-tree-row className="tree-row !px-0 !text-ink">
         rawnak
       </Link>
@@ -179,12 +165,12 @@ export function Sidebar({ folders }: { folders: NavFolders }) {
           </Link>
         </li>
         {renderFolder('blog')}
-        {renderFolder('projects')}
         <li>
           <Link href="/work" data-tree-row aria-current={ariaCurrent('/work')} className="tree-row">
             work
           </Link>
         </li>
+        {renderFolder('projects')}
         <li>
           <Link
             href="/contact"
@@ -196,12 +182,6 @@ export function Sidebar({ folders }: { folders: NavFolders }) {
           </Link>
         </li>
       </ul>
-
-      <p className="mt-10 hidden text-[0.7rem] leading-[1.9] text-muted md:block">
-        j k move · h l fold · ↵ open
-        <br />
-        ← → posts · esc card
-      </p>
     </nav>
   );
 }

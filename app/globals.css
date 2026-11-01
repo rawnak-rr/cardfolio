@@ -196,7 +196,7 @@ body {
     background: var(--color-surface);
   }
 
-  /* Outline on the row focused with the keyboard (j / k). */
+  /* Outline on the row focused with the arrow keys. */
   .tree-row:focus-visible {
     outline: 1px solid var(--color-muted);
     outline-offset: -1px;

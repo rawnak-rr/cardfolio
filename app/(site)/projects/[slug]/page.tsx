@@ -37,10 +37,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
   return (
     <article>
-      <PageHeader
-        meta={`since ${project.started} · ${project.stack.join(', ')}`}
-        title={project.name}
-      />
+      <PageHeader meta={project.stack.join(', ')} title={project.name} />
       <p className="mt-4 text-[0.95rem] text-ink">{project.tagline}</p>
 
       <div className="mt-12 space-y-6">
@@ -51,11 +48,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         ))}
       </div>
 
-      <section aria-labelledby="project-links" className="mt-14">
-        <h2 id="project-links" className={headingClass}>
-          links
-        </h2>
-        <ul className="mt-3 space-y-2 text-[0.95rem]">
+      <section aria-label="project links" className="mt-14">
+        <ul className="space-y-2 text-[0.95rem]">
           {project.links.map((link) => (
             <li key={link.href}>
               <a href={link.href} target="_blank" rel="noopener noreferrer" className="article-link text-body">

@@ -4,8 +4,8 @@ import type { KeyboardEvent, MouseEvent, PointerEvent, RefObject } from "react";
 import { useCopyEmail } from "@/app/components/use-copy-email";
 import { links, profile } from "@/lib/data";
 
-const textClass = "text-sm text-black";
-const linkClass = "dotted-link text-sm text-black px-1 py-0.5";
+const textClass = "text-base text-black";
+const linkClass = "dotted-link text-base text-black px-1 py-0.5";
 
 type CardProps = {
   cardRef: RefObject<HTMLDivElement | null>;
@@ -52,15 +52,15 @@ export function Card({
       >
         <div ref={cardRef} className="flip-card">
           <div className="card-face card-front">
-            <div className="flex h-full flex-col justify-end">
+            <div className="grid h-full grid-cols-[1fr_auto] items-end gap-2">
               <div className="space-y-0.5 text-left">
                 <h1 className={textClass}>{profile.name}</h1>
                 <p className={textClass}>{profile.role}</p>
-                <p className={textClass}>
-                  compsci <span className="font-sans">@</span>
-                  {profile.study}
-                </p>
               </div>
+              <p className={`${textClass} max-w-36 text-right`}>
+                compsci <span className="font-sans">@</span>
+                {profile.study}
+              </p>
             </div>
           </div>
 

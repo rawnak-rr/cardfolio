@@ -75,9 +75,9 @@ export function MobileBar({ folders }: { folders: NavFolders }) {
         <div className="flex justify-center gap-1">
           {tab(links.summary, 'summary')}
           {folderTab('blog')}
-          {folderTab('projects')}
           {tab('/', 'card')}
           {tab('/work', 'work')}
+          {folderTab('projects')}
           {tab('/contact', 'contact')}
         </div>
       </nav>
