@@ -5,10 +5,16 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { cardReturn } from '@/lib/card-return';
 import type { PostSummary } from '@/lib/posts';
+import type { Project } from '@/lib/projects';
 
 type SidebarProps = {
   posts: PostSummary[];
+  projects: Project[];
 };
+
+type FolderName = 'blog' | 'projects';
+
+type FolderItem = { href: string; title: string };
 
 const ROW = '[data-tree-row]';
 
@@ -20,11 +26,17 @@ function isEditableTarget(target: EventTarget | null) {
   );
 }
 
-export function Sidebar({ posts }: SidebarProps) {
+export function Sidebar({ posts, projects }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const navRef = useRef<HTMLElement>(null);
-  const [blogOpen, setBlogOpen] = useState(true);
+  const [openFolders, setOpenFolders] = useState<Record<FolderName, boolean>>({
+    blog: true,
+    projects: true,
+  });
+
+  const setFolderOpen = (name: FolderName, open: boolean) =>
+    setOpenFolders((folders) => ({ ...folders, [name]: open }));
 
   const currentSlug = pathname.startsWith('/blog/')
     ? pathname.slice('/blog/'.length)
@@ -78,7 +90,7 @@ export function Sidebar({ posts }: SidebarProps) {
       }
 
       const row = rows[index];
-      const isFolder = row.hasAttribute('aria-expanded');
+      const folder = row.dataset.folder as FolderName | undefined;
       const isOpen = row.getAttribute('aria-expanded') === 'true';
 
       switch (event.key) {
@@ -94,13 +106,13 @@ export function Sidebar({ posts }: SidebarProps) {
           break;
         case 'l':
           event.preventDefault();
-          if (isFolder && !isOpen) setBlogOpen(true);
-          else if (isFolder) rows[index + 1]?.focus();
+          if (folder && !isOpen) setOpenFolders((folders) => ({ ...folders, [folder]: true }));
+          else if (folder) rows[index + 1]?.focus();
           else row.click();
           break;
         case 'h':
           event.preventDefault();
-          if (isFolder && isOpen) setBlogOpen(false);
+          if (folder && isOpen) setOpenFolders((folders) => ({ ...folders, [folder]: false }));
           else if (row.dataset.treeParent) {
             nav.querySelector<HTMLElement>(row.dataset.treeParent)?.focus();
           }
@@ -115,6 +127,48 @@ export function Sidebar({ posts }: SidebarProps) {
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [currentIndex, posts, router]);
+
+  const renderFolder = (name: FolderName, items: FolderItem[]) => {
+    const open = openFolders[name];
+    return (
+      <li>
+        <button
+          type="button"
+          id={`tree-${name}-toggle`}
+          data-tree-row
+          data-folder={name}
+          aria-expanded={open}
+          aria-controls={`tree-${name}`}
+          onClick={() => setFolderOpen(name, !open)}
+          className="tree-row"
+        >
+          <span className="tree-label">{name}</span>
+          <span className="tree-chevron" aria-hidden="true">
+            ▾
+          </span>
+        </button>
+
+        <div id={`tree-${name}`} className="tree-children" data-collapsed={!open} inert={!open}>
+          <ul className="tree">
+            {items.map((item) => (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  title={item.title}
+                  data-tree-row
+                  data-tree-parent={`#tree-${name}-toggle`}
+                  aria-current={ariaCurrent(item.href)}
+                  className="tree-row"
+                >
+                  <span className="tree-label">{item.title}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </li>
+    );
+  };
 
   return (
     <nav ref={navRef} aria-label="Site" className="text-[0.8rem]">
@@ -133,49 +187,14 @@ export function Sidebar({ posts }: SidebarProps) {
             summary
           </Link>
         </li>
-        <li>
-          <button
-            type="button"
-            id="tree-blog-toggle"
-            data-tree-row
-            aria-expanded={blogOpen}
-            aria-controls="tree-blog"
-            onClick={() => setBlogOpen((open) => !open)}
-            className="tree-row"
-          >
-            <span className="tree-label">blog</span>
-            <span className="tree-chevron" aria-hidden="true">
-              ▾
-            </span>
-          </button>
-
-          <div
-            id="tree-blog"
-            className="tree-children"
-            data-collapsed={!blogOpen}
-            inert={!blogOpen}
-          >
-            <ul className="tree">
-              {posts.map((post) => {
-                const href = `/blog/${post.slug}`;
-                return (
-                  <li key={post.slug}>
-                    <Link
-                      href={href}
-                      title={post.title}
-                      data-tree-row
-                      data-tree-parent="#tree-blog-toggle"
-                      aria-current={ariaCurrent(href)}
-                      className="tree-row"
-                    >
-                      <span className="tree-label">{post.title}</span>
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        </li>
+        {renderFolder(
+          'blog',
+          posts.map((post) => ({ href: `/blog/${post.slug}`, title: post.title })),
+        )}
+        {renderFolder(
+          'projects',
+          projects.map((project) => ({ href: `/projects/${project.slug}`, title: project.name })),
+        )}
         <li>
           <Link href="/work" data-tree-row aria-current={ariaCurrent('/work')} className="tree-row">
             work

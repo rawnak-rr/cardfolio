@@ -4,23 +4,35 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import type { PostSummary } from '@/lib/posts';
+import type { Project } from '@/lib/projects';
 
 type MobileBarProps = {
   posts: PostSummary[];
+  projects: Project[];
 };
 
-const tabClass =
-  'px-1.5 py-3 text-muted transition-colors aria-[current=page]:text-ink aria-[expanded=true]:text-ink';
+type FolderName = 'blog' | 'projects';
 
-export function MobileBar({ posts }: MobileBarProps) {
+const tabClass =
+  'px-1 py-3 text-muted transition-colors aria-[current=page]:text-ink aria-[expanded=true]:text-ink';
+
+export function MobileBar({ posts, projects }: MobileBarProps) {
   const pathname = usePathname();
-  const [blogOpen, setBlogOpen] = useState(false);
+  const [openFolder, setOpenFolder] = useState<FolderName | null>(null);
 
   useEffect(() => {
-    setBlogOpen(false);
+    setOpenFolder(null);
   }, [pathname]);
 
   const ariaCurrent = (active: boolean) => (active ? 'page' : undefined);
+
+  const folders: Record<FolderName, { href: string; title: string }[]> = {
+    blog: posts.map((post) => ({ href: `/blog/${post.slug}`, title: post.title })),
+    projects: projects.map((project) => ({
+      href: `/projects/${project.slug}`,
+      title: project.name,
+    })),
+  };
 
   const tab = (href: string, label: string) => (
     <Link href={href} aria-current={ariaCurrent(pathname === href)} className={tabClass}>
@@ -28,14 +40,27 @@ export function MobileBar({ posts }: MobileBarProps) {
     </Link>
   );
 
+  const folderTab = (name: FolderName) => (
+    <button
+      type="button"
+      aria-expanded={openFolder === name}
+      aria-controls="mobile-folder-list"
+      aria-current={ariaCurrent(pathname.startsWith(`/${name}/`))}
+      onClick={() => setOpenFolder((open) => (open === name ? null : name))}
+      className={`${tabClass} cursor-pointer`}
+    >
+      [{name}]
+    </button>
+  );
+
   return (
     <div className="md:hidden">
-      {blogOpen ? (
+      {openFolder ? (
         <button
           type="button"
-          aria-label="Close blog list"
+          aria-label={`Close ${openFolder} list`}
           className="fixed inset-0 z-40 cursor-default"
-          onClick={() => setBlogOpen(false)}
+          onClick={() => setOpenFolder(null)}
         />
       ) : null}
 
@@ -43,40 +68,29 @@ export function MobileBar({ posts }: MobileBarProps) {
         aria-label="Site"
         className="fixed inset-x-0 bottom-0 z-50 border-t border-rule bg-black pb-[env(safe-area-inset-bottom)] text-[0.75rem]"
       >
-        {blogOpen ? (
+        {openFolder ? (
           <ul
-            id="mobile-blog-list"
+            id="mobile-folder-list"
             className="tree absolute inset-x-0 bottom-full border-t border-rule bg-black px-6 py-4"
           >
-            {posts.map((post) => {
-              const href = `/blog/${post.slug}`;
-              return (
-                <li key={post.slug}>
-                  <Link
-                    href={href}
-                    aria-current={ariaCurrent(pathname === href)}
-                    className="tree-row"
-                  >
-                    <span className="tree-label">{post.title}</span>
-                  </Link>
-                </li>
-              );
-            })}
+            {folders[openFolder].map((item) => (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  aria-current={ariaCurrent(pathname === item.href)}
+                  className="tree-row"
+                >
+                  <span className="tree-label">{item.title}</span>
+                </Link>
+              </li>
+            ))}
           </ul>
         ) : null}
 
         <div className="flex justify-center gap-1">
           {tab('/summary', 'summary')}
-          <button
-            type="button"
-            aria-expanded={blogOpen}
-            aria-controls="mobile-blog-list"
-            aria-current={ariaCurrent(pathname.startsWith('/blog/'))}
-            onClick={() => setBlogOpen((open) => !open)}
-            className={`${tabClass} cursor-pointer`}
-          >
-            [blog]
-          </button>
+          {folderTab('blog')}
+          {folderTab('projects')}
           {tab('/', 'card')}
           {tab('/work', 'work')}
           {tab('/contact', 'contact')}

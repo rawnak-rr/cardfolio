@@ -13,6 +13,7 @@ export type PostFrontmatter = {
   description: string;
   publishedAt: string;
   readingTime: number;
+  project?: string;
 };
 
 export type Post = PostFrontmatter & {
@@ -44,6 +45,10 @@ export function getPost(slug: string): Post | undefined {
 
 export function getPostSummaries(): PostSummary[] {
   return getAllPosts().map(({ Content: _, ...summary }) => summary);
+}
+
+export function getPostsForProject(project: string): PostSummary[] {
+  return getPostSummaries().filter((post) => post.project === project);
 }
 
 export function formatPostDate(date: string): string {
