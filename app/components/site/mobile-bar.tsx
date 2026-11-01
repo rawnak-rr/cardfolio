@@ -12,16 +12,10 @@ type MobileBarProps = {
 const tabClass =
   'px-1.5 py-3 text-muted transition-colors aria-[current=page]:text-ink aria-[expanded=true]:text-ink';
 
-/**
- * The phone's stand-in for the sidebar: a herdr-style tab strip pinned to the bottom.
- * The blog tab pops the post list up above the bar (a placeholder until the phone
- * blog list gets a proper design).
- */
 export function MobileBar({ posts }: MobileBarProps) {
   const pathname = usePathname();
   const [blogOpen, setBlogOpen] = useState(false);
 
-  // Picking a post (or any tab) navigates, which should put the list away.
   useEffect(() => {
     setBlogOpen(false);
   }, [pathname]);

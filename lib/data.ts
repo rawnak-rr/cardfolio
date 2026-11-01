@@ -17,7 +17,6 @@ export type WorkItem = {
   role: string;
   date: string;
   summary: string;
-  /** Condensed labels for the card back, where space is tight. */
   shortCompany?: string;
   shortRole?: string;
 };

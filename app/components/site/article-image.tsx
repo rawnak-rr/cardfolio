@@ -17,7 +17,6 @@ function joinClassNames(...classNames: Array<string | undefined>) {
 
 export function ArticleImage({ alt, className, ...props }: ArticleImageProps) {
   return (
-    // A native image keeps MDX compatible with local and remote sources of any size.
     // eslint-disable-next-line @next/next/no-img-element
     <img
       decoding="async"

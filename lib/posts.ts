@@ -32,7 +32,6 @@ const postRegistry: Post[] = [
   },
 ];
 
-/** Newest first. */
 export function getAllPosts(): Post[] {
   return postRegistry.toSorted(
     (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
@@ -43,7 +42,6 @@ export function getPost(slug: string): Post | undefined {
   return postRegistry.find((post) => post.slug === slug);
 }
 
-/** The serialisable part of a post, for passing to client components. */
 export function getPostSummaries(): PostSummary[] {
   return getAllPosts().map(({ Content: _, ...summary }) => summary);
 }

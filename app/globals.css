@@ -1,30 +1,41 @@
 @import "tailwindcss";
 
-/* No rubber-band bounce past the top or bottom of the page. */
+/* =============================================================================
+   PAGE
+   ========================================================================== */
+
+/* Stops the page bouncing when you scroll past the top or bottom. */
 html,
 body {
   overscroll-behavior: none;
 }
 
+/* =============================================================================
+   CARD (home page)
+   ========================================================================== */
+
+/* The clickable area that holds the card. Fixed 3:2 shape, like a business card. */
 .card-button {
   aspect-ratio: 3 / 2;
   cursor: pointer;
   border-radius: 1.75rem;
 }
 
+/* Links on the card (the email and "open →"): dotted underline. */
 .dotted-link {
   text-decoration: none;
   border-bottom: 2px dotted rgba(0, 0, 0, 0.5);
   transition: color 0.2s ease;
 }
 
-/* `data-pointer-over` is set by the card while the pointer is over a link, because
-   the browser's own :hover resolution is unreliable through the tilted card. */
+/* Hover state for card links. `data-pointer-over` is added by JavaScript because the
+   browser's normal :hover doesn't work reliably while the card is tilted in 3D. */
 .dotted-link:hover,
 .dotted-link[data-pointer-over] {
   color: #000;
 }
 
+/* The part that rotates when the card flips. Holds both faces and the drop shadow. */
 .flip-card {
   position: relative;
   height: 100%;
@@ -36,6 +47,8 @@ body {
     0 22px 32px -22px rgba(15, 23, 42, 0.55);
 }
 
+/* Shared by both faces. `backface-visibility: hidden` hides whichever face is
+   turned away, so only one side shows at a time. */
 .card-face {
   position: absolute;
   inset: 0;
@@ -47,6 +60,7 @@ body {
   backface-visibility: hidden;
 }
 
+/* Front face: name, role, study. The inset shadows give it a slight 3D edge. */
 .card-front {
   background-color: #cc5200;
   box-shadow:
@@ -54,6 +68,8 @@ body {
     inset 0 -16px 30px -22px rgba(20, 7, 0, 0.55);
 }
 
+/* Back face: email and "open →". Pre-rotated 180° so it faces forward once the
+   card flips. */
 .card-back {
   background-color: #cc5200;
   transform: rotateY(180deg);
@@ -62,10 +78,19 @@ body {
     inset 0 -16px 30px -20px rgba(20, 7, 0, 0.65);
 }
 
-/* --- site (sidebar + pages) ------------------------------------------------ */
+/* =============================================================================
+   SITE (summary, blog, work, contact)
+   ========================================================================== */
 
+/* Lets Tailwind see class names used inside the blog posts in /content. */
 @source "../content";
 
+/* Site colours. Each one becomes a Tailwind class, e.g. text-ink, border-rule.
+   ink     = headings and active text
+   body    = paragraph text
+   muted   = secondary text (dates, inactive sidebar rows)
+   rule    = divider and tree lines
+   surface = highlighted background (the selected sidebar row) */
 @theme {
   --color-ink: #e8e6e1;
   --color-body: rgb(232 230 225 / 78%);
@@ -74,8 +99,13 @@ body {
   --color-surface: #161615;
 }
 
-/* Layered so Tailwind utilities can still override these per element. */
+/* Everything below sits in the "components" layer, so a Tailwind class written on
+   an element can still override it. */
 @layer components {
+  /* ---------------------------------------------------------------------------
+     Links in text (blog posts, summary): dotted underline drawn with a
+     background image so it wraps neatly across lines.
+     ------------------------------------------------------------------------ */
   .article-link {
     --link-dot: rgb(232 230 225 / 55%);
 
@@ -94,8 +124,11 @@ body {
     color: var(--color-ink);
   }
 
-  /* File-tree connectors. Each item draws its own `└─`; every item but the last also
-     carries the vertical line on down to its next sibling, which together reads as `├─`. */
+  /* ---------------------------------------------------------------------------
+     Sidebar file tree (also used for the blog list in the phone bottom bar).
+     ------------------------------------------------------------------------ */
+
+  /* The list itself. --row-h is the height of every row. */
   .tree {
     --row-h: 2rem;
     margin: 0;
@@ -103,11 +136,15 @@ body {
     list-style: none;
   }
 
+  /* Each item is indented to make room for the connector lines on its left. */
   .tree li {
     position: relative;
     padding-left: 1.125rem;
   }
 
+  /* The connector lines. ::before draws this item's `└─`. ::after continues the
+     vertical line down to the next item (skipped on the last item), so together
+     they read as `├─` ... `└─`. */
   .tree li::before,
   .tree li:not(:last-child)::after {
     content: '';
@@ -127,6 +164,7 @@ body {
     bottom: 0;
   }
 
+  /* One clickable row (a link or the blog folder button). */
   .tree-row {
     display: flex;
     align-items: center;
@@ -148,23 +186,27 @@ body {
     color: var(--color-ink);
   }
 
-  /* Placeholder until the selected-row reference comes through. */
+  /* The row for the page you're currently on. Placeholder style until the
+     selected-row design is decided. */
   .tree-row[aria-current='page'] {
     color: var(--color-ink);
     background: var(--color-surface);
   }
 
+  /* Outline on the row focused with the keyboard (j / k). */
   .tree-row:focus-visible {
     outline: 1px solid var(--color-muted);
     outline-offset: -1px;
   }
 
+  /* Row text. Long post titles get cut off with "…". */
   .tree-label {
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
+  /* The ▾ arrow next to "blog". Turns to point right when the folder is closed. */
   .tree-chevron {
     color: var(--color-muted);
     transition: transform 0.18s cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -174,8 +216,9 @@ body {
     transform: rotate(-90deg);
   }
 
-  /* Animating grid rows from 1fr to 0fr collapses to the content's real height, with
-     no measuring in JS. */
+  /* The blog folder's contents, with the open/close animation. Animating the grid
+     row from 1fr (open) to 0fr (closed) slides it to the right height without
+     needing JavaScript to measure anything. */
   .tree-children {
     display: grid;
     grid-template-rows: 1fr;
@@ -195,6 +238,7 @@ body {
     overflow: hidden;
   }
 
+  /* No folder animations for people who've turned on "reduce motion". */
   @media (prefers-reduced-motion: reduce) {
     .tree-children,
     .tree-chevron {

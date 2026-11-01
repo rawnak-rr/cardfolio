@@ -7,7 +7,6 @@ import { Card } from '@/app/components/card';
 import { cardReturn } from '@/lib/card-return';
 import { links } from '@/lib/data';
 
-/** Slack around a link before the card levels out for it, and before it tilts again. */
 const TARGET_ENTER_PAD = 6;
 const TARGET_EXIT_PAD = 14;
 
@@ -33,13 +32,10 @@ export function CardFolio() {
     }
   }, []);
 
-  // OPEN is a plain <a> (it has to wait for the exit animation), so nothing prefetches
-  // the site behind it. Fetch it now so the push at the end of the animation is instant.
   useEffect(() => {
     router.prefetch(links.summary);
   }, [router]);
 
-  // Layout effect so a returning card is parked off-screen before the first paint.
   useLayoutEffect(() => {
     const el = cardRef.current;
     const container = cardContainerRef.current;
@@ -51,9 +47,6 @@ export function CardFolio() {
       transformOrigin: '50% 50%',
     });
 
-    // Coming back from the site: drop the card back in, the exit animation in reverse.
-    // The flag is cleared on completion, not here, so a Strict Mode remount (which
-    // kills this timeline in cleanup) replays the drop-in instead of stranding the card.
     if (cardReturn.pending) {
       isFlipping.current = true;
       setCardStable(false);
@@ -89,9 +82,6 @@ export function CardFolio() {
     };
   }, []);
 
-  // A back-navigation can restore this page from bfcache with the exit animation's
-  // inline transforms still applied, leaving the card parked off-screen. Put it back
-  // where it belongs whenever the page is shown.
   useEffect(() => {
     const onPageShow = () => {
       timelineRef.current?.kill();
@@ -133,7 +123,6 @@ export function CardFolio() {
     isMousePointer.current = e.pointerType === 'mouse';
   };
 
-  /** The links and buttons on whichever face is currently facing the viewer. */
   const visibleFaceTargets = () => {
     const face = cardRef.current?.querySelector(
       isFlipped ? '.card-back' : '.card-front',
@@ -156,31 +145,16 @@ export function CardFolio() {
     );
   };
 
-  /**
-   * The target under the pointer, measured against the rects rather than read off the
-   * event: the browser's own hit-testing is the thing that breaks while the card is
-   * tilted, so it can't be trusted to answer this.
-   */
   const targetUnder = (clientX: number, clientY: number, pad = 0) =>
     visibleFaceTargets().find((target) => isWithin(target, clientX, clientY, pad)) ??
     null;
 
-  /**
-   * The target the card should sit level for. The zone is padded, and holds on to the
-   * previous target until the pointer is clearly away from it, so sweeping across the
-   * stacked links doesn't switch the tilt on and off repeatedly.
-   */
   const levelTargetAt = (clientX: number, clientY: number) => {
     const held = levelTarget.current;
     if (held && isWithin(held, clientX, clientY, TARGET_EXIT_PAD)) return held;
     return targetUnder(clientX, clientY, TARGET_ENTER_PAD);
   };
 
-  /**
-   * Drives the hover styling ourselves. The browser resolves `:hover` with the same
-   * unreliable hit test, and only re-resolves it on the next pointer move, so its
-   * state can sit stale on the card after we level out.
-   */
   const markPointerOver = useCallback((target: Element | null) => {
     if (hoveredTarget.current === target) return;
     hoveredTarget.current?.removeAttribute('data-pointer-over');
@@ -198,11 +172,6 @@ export function CardFolio() {
 
     markPointerOver(targetUnder(e.clientX, e.clientY));
 
-    // Chrome hit-tests unreliably through a tilted preserve-3d subtree: with any tilt
-    // applied, roughly a third of each link's box resolves to the card itself. Ease
-    // the card level while the pointer is on a target so the browser can resolve it
-    // again. Clicks that land mid-ease are recovered in handleCardToggle, so this can
-    // stay on the same timing as the tilt itself rather than snapping flat.
     levelTarget.current = levelTargetAt(e.clientX, e.clientY);
 
     if (levelTarget.current) {
@@ -252,19 +221,12 @@ export function CardFolio() {
     });
   };
 
-  /**
-   * Spins the card upright then flings it off the top of the screen on the way to
-   * one of the site's pages. Returns false
-   * when the card isn't mounted yet, so callers can fall back to no animation.
-   */
   const animateCardExit = useCallback(
     (onComplete: () => void) => {
       const container = cardContainerRef.current;
       const card = cardRef.current;
       if (!container || !card) return false;
 
-      // Marks the card as animating so pointer tilt/reset tweens don't overwrite the
-      // exit timeline's rotation while it plays.
       isFlipping.current = true;
       clearPointerTarget();
       setCardStable(false);
@@ -319,9 +281,6 @@ export function CardFolio() {
   };
 
   const handleCardToggle = (e: React.MouseEvent<HTMLDivElement>) => {
-    // A click that lands on a link while the card is tilted can be handed to the card
-    // instead of the link, which would flip the card out from under the pointer. Send
-    // it on to whatever was really under the cursor rather than acting on it here.
     const target = targetUnder(e.clientX, e.clientY);
     if (target && !isRoutingClick.current) {
       isRoutingClick.current = true;

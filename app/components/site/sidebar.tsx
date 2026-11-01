@@ -52,13 +52,11 @@ export function Sidebar({ posts }: SidebarProps) {
       const nav = navRef.current;
       if (!nav) return;
 
-      // Rows inside a folded folder are inert, so they drop out of the walk too.
       const rows = Array.from(nav.querySelectorAll<HTMLElement>(ROW)).filter(
         (row) => !row.closest('[inert]'),
       );
       const index = rows.indexOf(document.activeElement as HTMLElement);
 
-      // The arrows page through posts wherever focus is; h/l are the tree's fold keys.
       if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
         if (currentIndex === -1) return;
         event.preventDefault();
@@ -69,7 +67,6 @@ export function Sidebar({ posts }: SidebarProps) {
       }
 
       if (index === -1) {
-        // Outside the tree, j/k drop the cursor onto the current page's row.
         if (event.key === 'j' || event.key === 'k') {
           event.preventDefault();
           (rows.find((row) => row.getAttribute('aria-current') === 'page') ?? rows[0])?.focus();

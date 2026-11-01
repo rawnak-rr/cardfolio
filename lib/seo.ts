@@ -55,7 +55,6 @@ export function absoluteUrl(path = '/') {
   return new URL(path, siteUrl).toString();
 }
 
-/** Per-route metadata; the shared fields live on the root layout. */
 export function pageMetadata(key: keyof typeof routeMetadata): Metadata {
   const { path, title, description } = routeMetadata[key];
 

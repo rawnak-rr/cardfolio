@@ -17,7 +17,6 @@ type CardProps = {
   onPointerEnter: (e: PointerEvent<HTMLDivElement>) => void;
   onPointerMove: (e: PointerEvent<HTMLDivElement>) => void;
   onPointerLeave: () => void;
-  /** The OPEN link: plays the card's exit before navigating into the site. */
   onLeaveClick: (e: MouseEvent<HTMLAnchorElement>) => void;
 };
 
@@ -42,7 +41,6 @@ export function Card({
   }, []);
 
   const handleCopyEmail = (e: MouseEvent<HTMLButtonElement>) => {
-    // Keep the click from reaching the card, which would flip it.
     e.stopPropagation();
     navigator.clipboard.writeText(profile.email);
     setEmailCopied(true);
