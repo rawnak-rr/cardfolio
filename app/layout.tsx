@@ -13,7 +13,7 @@ import './globals.css';
 const iosevka = localFont({
   src: [
     {
-      path: '../node_modules/@fontsource/iosevka/files/iosevka-latin-400-normal.woff2',
+      path: './fonts/iosevka-400.woff2',
       weight: '400',
       style: 'normal',
     },
